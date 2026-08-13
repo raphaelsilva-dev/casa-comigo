@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="robots" content="noindex,nofollow,noarchive,noimageindex,nosnippet"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="#d8e8ff" name="theme-color"/>
+<script src="js/theme.js"></script>
+<title>Linha do Tempo</title>
+<link href="images/favicon/favicon.png" rel="icon" type="image/png"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="css/style.css" rel="stylesheet"/>
+<link href="css/theme.css" rel="stylesheet"/><link href="css/auth.css" rel="stylesheet"/><link href="css/extras.css" rel="stylesheet"/></head>
+<body>
+<div class="bg-layer">
+<div class="blob-field">
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+<div class="blob blob4"></div>
+</div>
+<div class="glass-veil"></div>
+<div class="glass-sheen"></div>
+<div class="grain-layer"></div>
+</div>
+<div aria-hidden="true" class="stars-layer" id="stars-layer"></div>
+<header class="site-hotbar" id="site-hotbar">
+<a aria-label="Voltar ao início" class="hotbar-brand" href="#hero">
+<span>nós</span><span>dois</span>
+</a>
+<nav aria-label="Navegação principal" class="hotbar-nav">
+<div class="hotbar-dropdown" id="story-dropdown">
+<button aria-expanded="false" class="hotbar-dropdown-btn" id="nav-story-btn" type="button">
+<span id="nav-story-label">Nossa história</span><span class="hotbar-caret">⌄</span>
+</button>
+<div aria-label="Nossa história" class="hotbar-submenu">
+<a class="active" href="#timeline-section" id="nav-timeline">Linha do tempo</a>
+<a href="planos.html">Planos</a>
+<a href="acervo.html">Acervo</a>
+</div>
+</div>
+<a class="hotbar-link" data-contract-nav href="#envelope-section" id="nav-contract">Contrato</a>
+<a class="hotbar-link" href="#footer-promises" id="nav-promises">Mais +</a>
+</nav>
+<div class="hotbar-actions">
+<div class="music-mini-player" id="music-mini-player">
+<button aria-label="Tocar nossa playlist" class="music-control" id="music-control" title="Bilhete 2.0, Rashid &amp; Luccas Carlos" type="button">
+<span aria-hidden="true" class="music-note">♫</span>
+<svg aria-hidden="true" class="music-state-icon play" viewbox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+<svg aria-hidden="true" class="music-state-icon pause" viewbox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z"></path></svg>
+<span class="music-current-title" id="music-current-title">Bilhete 2.0</span>
+</button>
+<div aria-label="Nossa playlist" class="music-menu" id="music-menu">
+<div class="music-menu-head"><span id="music-menu-label">Nossa playlist</span><span class="music-menu-note" aria-hidden="true">♫</span><button class="music-menu-close" id="music-menu-close" type="button" aria-label="Fechar playlist">×</button></div>
+<div class="music-menu-list" id="music-menu-list"></div>
+<div class="music-player-status" id="music-player-status">Passe o mouse aqui para escolher uma faixa.</div>
+</div>
+</div>
+<div class="lang-switcher" id="lang-switcher">
+<button aria-expanded="false" aria-label="Selecionar idioma" class="lang-current" id="lang-current" type="button">
+<span id="lang-current-code">PT</span><span class="hotbar-caret">⌄</span>
+</button>
+<div class="lang-menu" id="lang-menu">
+<button class="lang-option active" data-lang="pt" type="button"><span>Português</span><strong>PT</strong></button>
+<button class="lang-option" data-lang="en" type="button"><span>English</span><strong>EN</strong></button>
+<button class="lang-option" data-lang="es" type="button"><span>Español</span><strong>ES</strong></button>
+</div>
+</div>
+<button aria-label="Ativar modo escuro" class="theme-toggle" data-theme-toggle="" title="Modo escuro" type="button">
+<svg aria-hidden="true" class="theme-sun" viewbox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path></svg>
+<svg aria-hidden="true" class="theme-moon" viewbox="0 0 24 24"><path d="M20.5 14.5A8 8 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"></path></svg>
+</button>
+<button class="hotbar-cta" id="hotbar-call" type="button"><span id="hotbar-call-label">Me liga</span><span class="hotbar-cta-arrow">→</span></button>
+<button aria-expanded="false" aria-label="Abrir menu" class="hotbar-menu-toggle" id="hotbar-menu-toggle" type="button"><span></span></button>
+</div>
+<div class="hotbar-mobile-panel" id="hotbar-mobile-panel">
+<a href="#timeline-section" id="mobile-nav-story">Nossa história <span>→</span></a>
+<a data-contract-nav href="#envelope-section" id="mobile-nav-contract">Contrato <span>→</span></a><a href="planos.html" id="mobile-nav-planos">Planos <span>→</span></a><a href="acervo.html" id="mobile-nav-acervo">Acervo <span>→</span></a>
+<button class="mobile-call" id="mobile-call" type="button"><span id="mobile-call-label">Me liga</span><span>→</span></button>
+</div>
+</header>
+<audio id="site-audio-a" playsinline="" preload="auto"></audio>
+<audio id="site-audio-b" playsinline="" preload="auto"></audio>
+<!-- LOADING -->
+<div id="loading">
+<div id="pixel-heart"></div>
+<div id="loading-percent">0%</div>
+<div id="loading-text">enchendo de amor...</div>
+</div>
+<!-- HERO -->
+<section class="section" id="hero">
+<h1 id="hero-title">Nosso Capítulo</h1>
+<p class="subtitle" id="hero-subtitle">Antes de qualquer coisa, um aviso: isto aqui é sério (mas também é uma desculpa pra te lembrar o quanto eu te amo).</p>
+<div class="scroll-hint">role para baixo ↓</div>
+</section>
+<!-- TIMELINE -->
+<section class="section" id="timeline-section">
+<div class="eyebrow">nossa história até aqui</div>
+<h2 class="section-title">O que nos trouxe até aqui</h2>
+<div class="timeline" id="timeline"></div>
+</section>
+<!-- ENVELOPE -->
+<section class="section" id="envelope-section">
+<div class="contract-gate" id="contract-gate">
+  <h2 data-gate-title>E agora? Eu só quero mais capítulos de você na minha vida.</h2>
+  <p data-gate-lead>Eu amo tudo o que a gente já viveu, mas gosto ainda mais de imaginar o que ainda cabe em nós: mais dias, mais risadas, mais saudade virando abraço e histórias que a gente nem sabe que vai contar. Se você também quiser continuar escrevendo isso comigo, tem uma escolha esperando por você.</p>
+  <a class="contract-gate-button" data-gate-button href="planos.html">Continuar nossa história →</a>
+</div>
+<div class="contract-unlocked-content">
+<div class="eyebrow">tem uma coisa pra você</div>
+<h2 class="section-title">Chegou uma carta</h2>
+<div class="envelope-stage" id="envelope">
+<div class="env-body"></div>
+<div class="letter-peek"></div>
+<div class="env-pocket"></div>
+<div class="env-flap"></div>
+</div>
+<div class="envelope-hint" id="envelope-hint">toque no envelope para abrir</div>
+</div>
+</section>
+<!-- LETTER -->
+<section class="section" id="letter-section">
+<div class="letter-card" id="letter-card"></div>
+</section>
+<!-- VOUCHERS -->
+<section class="section" id="vouchers-section">
+<div class="eyebrow">cláusula bônus</div>
+<h2 class="section-title" id="vouchers-title">Os vouchers do nosso novo contrato</h2>
+<div class="voucher-carousel" id="voucher-carousel">
+<div class="voucher-viewport" id="voucher-viewport">
+<div class="voucher-track" id="voucher-track"></div>
+</div>
+</div>
+<div class="voucher-controls">
+<button aria-label="Voucher anterior" class="voucher-nav prev" id="voucher-prev" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M15 5 8 12l7 7"></path></svg></button>
+<button aria-label="Próximo voucher" class="voucher-nav next" id="voucher-next" type="button"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="m9 5 7 7-7 7"></path></svg></button>
+</div>
+</section>
+<!-- BOUQUET -->
+<section class="section" id="bouquet-section">
+<div class="bouquet-wrap">
+<div class="memory-stack" id="flowers"></div>
+</div>
+<p class="bouquet-note" id="bouquet-note">Para você, a pessoa que topou renovar comigo, hoje e sempre.
+    <span class="signed" id="bouquet-signed">Com amor.</span>
+</p>
+</section>
+<!-- LOVE NOTES -->
+<section class="section" id="love-notes-section">
+<div class="eyebrow">só pra te lembrar</div>
+<h2 class="section-title">Pequenas frases que sempre me levam até você</h2>
+<div class="love-notes-wrap">
+<div class="love-notes-marquee" id="love-notes-marquee"></div>
+</div>
+</section>
+<!-- RODAPÉ -->
+<footer aria-label="Rodapé do site" class="site-footer">
+<div class="footer-shell">
+<section class="footer-panel footer-cta">
+<h2>Gostou?<br/>Me liga aí.</h2>
+<p>
+        Gosto de ouvir sua voz, saber do seu dia e roubar mais um tempinho nosso.
+        Se quiser conversar, eu sempre vou adorar atender você.
+      </p>
+<button class="footer-action" id="open-phone-modal" type="button">Ligar</button>
+</section>
+<div class="footer-panel footer-directory">
+<article class="footer-story">
+<h3>Nossa história continua</h3>
+<p>
+          A linha do tempo mostra como tudo começou, o contrato mostra o quanto isso faz sentido
+          e essa parte final guarda o que mais importa: lembrar que tudo o que a gente viveu até aqui
+          ainda abre espaço para muito mais conversa, carinho, risadas e capítulos bonitos juntos.
+        </p>
+<div class="footer-story-links">
+<a href="#timeline-section">Rever nossa linha do tempo</a>
+<a data-footer-progress="contract" href="#letter-section" id="footer-contract-link">Reler o contrato</a>
+<a data-footer-progress="memories" href="#bouquet-section" id="footer-memory-link">Guardar essas memórias</a>
+</div>
+</article>
+<div class="footer-group promises" id="footer-promises">
+<h3>Saiba +</h3>
+<div class="footer-chip-links" id="promise-links"></div>
+</div>
+<div class="footer-group contacts">
+<h3>Meus Contatos</h3>
+<div class="footer-socials" id="footer-socials"></div>
+</div>
+</div>
+</div>
+<div class="footer-bottom">
+<span class="footer-signature" id="footer-text">feito com ♥ e uns pixels</span>
+<div class="footer-bottom-meta"><button class="footer-credits-link" id="open-credits-modal" type="button">Créditos</button><span>Nosso Contrato · segue valendo em todos os capítulos</span></div>
+</div>
+</footer>
+<div class="phone-modal-backdrop" id="phone-modal-backdrop">
+<div aria-labelledby="phone-modal-title" aria-modal="true" class="phone-modal" role="dialog">
+<button aria-label="Fechar modal" class="phone-modal-close" id="close-phone-modal" type="button">×</button>
+<div class="phone-note">
+<span class="phone-note-pin"></span>
+<div class="phone-note-header" id="phone-modal-title">se bater saudade</div>
+<p class="phone-note-sub">me chama, me liga ou só inventa uma desculpa bonita para conversar comigo</p>
+<div class="phone-note-paper">
+<span class="handwritten-label">meu número</span>
+<strong id="phone-number-display">(11) 96591-6170</strong>
+</div>
+</div>
+</div>
+</div>
+<script src="js/config.js"></script><script src="js/auth.js"></script><script src="js/extras.js"></script><script src="js/progress.js"></script><script src="js/app.js"></script></body>
+</html>

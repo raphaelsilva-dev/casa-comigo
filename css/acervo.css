@@ -1,0 +1,985 @@
+/* ====================================================================
+   ACERVO — feed misto de fotos, poesias, elogios, prints e referências
+   ==================================================================== */
+.archive-hero{max-width:920px;margin-bottom:54px}
+.archive-toolbar{margin-top:28px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.archive-shuffle{border:1px solid rgba(34,65,109,.11);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.42);color:var(--navy-950);font:800 .88rem/1 var(--font-body);cursor:pointer;backdrop-filter:blur(18px) saturate(120%);-webkit-backdrop-filter:blur(18px) saturate(120%);transition:transform .22s ease,background .22s ease,box-shadow .22s ease}
+.archive-shuffle:hover,.archive-shuffle:focus-visible{transform:translateY(-2px);background:rgba(255,255,255,.62);box-shadow:0 12px 28px rgba(35,69,116,.12);outline:none}
+.archive-shuffle.is-shuffling{animation:archiveShuffle .55s cubic-bezier(.22,1,.36,1)}
+@keyframes archiveShuffle{0%{transform:rotate(0) scale(1)}45%{transform:rotate(-5deg) scale(.96)}100%{transform:rotate(0) scale(1)}}
+.archive-counter{font-family:var(--pixel);font-size:7px;letter-spacing:.7px;color:rgba(28,62,108,.54);text-transform:uppercase}
+
+.archive-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-flow:dense;gap:18px;align-items:stretch}
+.archive-card{position:relative;min-width:0;min-height:330px;border:1px solid rgba(255,255,255,.52);border-radius:20px;background:rgba(248,250,255,.38);box-shadow:0 16px 38px rgba(48,78,121,.09);backdrop-filter:blur(22px) saturate(128%);-webkit-backdrop-filter:blur(22px) saturate(128%);overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:transform .28s cubic-bezier(.22,1,.36,1),box-shadow .28s ease,border-color .28s ease,opacity .28s ease,filter .28s ease}
+.archive-card.is-wide{grid-column:span 2;min-height:350px}
+.archive-card.is-poem,.archive-card.is-compliment{min-height:300px}
+.archive-card:hover,.archive-card:focus-visible{transform:translateY(-6px) scale(1.008);box-shadow:0 25px 56px rgba(38,72,119,.15);border-color:rgba(111,161,230,.32);outline:none}
+.archive-card-media-wrap{position:relative;min-height:190px;flex:1;overflow:hidden;background:linear-gradient(145deg,rgba(126,174,237,.12),rgba(255,255,255,.22))}
+.archive-card.is-poem .archive-card-media-wrap,.archive-card.is-compliment .archive-card-media-wrap{min-height:128px;max-height:160px}
+.archive-card-media{width:100%;height:100%;min-height:190px;display:block;object-fit:cover;transition:transform .55s cubic-bezier(.22,1,.36,1)}
+.archive-card:hover .archive-card-media{transform:scale(1.035)}
+.archive-media-fallback{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px;padding:22px;color:rgba(37,72,120,.56);background:linear-gradient(145deg,rgba(222,235,252,.62),rgba(188,215,248,.36));font-family:var(--pixel);font-size:8px;line-height:1.7;letter-spacing:.5px;z-index:0}
+.archive-media-fallback small{font-family:var(--font-body);font-size:.72rem;font-weight:600;letter-spacing:0;line-height:1.45;color:rgba(28,55,92,.52);word-break:break-word}
+.archive-card-media:not([src=""]) + .archive-media-fallback{z-index:-1}
+.archive-text-orb{height:100%;min-height:138px;display:grid;place-items:center;background:radial-gradient(circle at 30% 30%,rgba(136,181,244,.28),transparent 38%),linear-gradient(145deg,rgba(255,255,255,.26),rgba(126,174,237,.10));font-family:var(--pixel);font-size:8px;letter-spacing:1px;color:rgba(39,79,132,.58)}
+.archive-card-copy{padding:20px 21px 22px;display:flex;flex-direction:column;gap:9px}
+.archive-card-category{font-family:var(--pixel);font-size:7px;letter-spacing:1px;color:var(--blue-500)}
+.archive-card h2{font-size:1.35rem;line-height:1.08;letter-spacing:-.035em}
+.archive-card p{font-size:.88rem;line-height:1.58;color:rgba(14,32,59,.66)}
+.archive-card-sign{margin-top:2px;font-size:.82rem;font-style:italic;font-weight:700;color:var(--blue-500)}
+.archive-carousel-count{font-family:var(--pixel);font-size:6px;letter-spacing:.7px;color:rgba(32,67,112,.48);text-transform:uppercase}
+.archive-new-badge,.archive-lock-badge{position:absolute;top:13px;padding:7px 9px;border-radius:10px;font-family:var(--pixel);font-size:6px;letter-spacing:.7px;z-index:3;box-shadow:0 7px 20px rgba(25,51,91,.09)}
+.archive-new-badge{left:13px;background:rgba(238,247,255,.82);color:var(--blue-500);backdrop-filter:blur(12px)}
+.archive-lock-badge{right:13px;background:rgba(6,17,34,.78);color:#f2f7ff;backdrop-filter:blur(12px)}
+.archive-card.is-protected .archive-card-media,.archive-card.is-protected .archive-text-orb{filter:blur(8px) saturate(.75);transform:scale(1.04)}
+.archive-card.is-protected .archive-card-copy p{filter:blur(4px);user-select:none}
+.archive-card.is-cycle-locked{opacity:.46;filter:saturate(.55);transform:none!important}
+.archive-card.is-cycle-locked::after{content:"PAUSA";position:absolute;inset:0;display:grid;place-items:center;background:rgba(224,236,252,.34);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);font-family:var(--pixel);font-size:8px;letter-spacing:1px;color:var(--navy-800);z-index:8}
+
+.archive-viewer,.archive-lock-backdrop{position:fixed;inset:0;z-index:950;display:grid;place-items:center;padding:28px;background:rgba(215,229,247,.26);backdrop-filter:blur(18px) saturate(106%);-webkit-backdrop-filter:blur(18px) saturate(106%);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .26s ease,visibility .26s ease}
+.archive-viewer.is-open,.archive-lock-backdrop.is-open{opacity:1;visibility:visible;pointer-events:auto}
+.archive-viewer-card{position:relative;width:min(1080px,100%);height:min(760px,calc(100vh - 56px));display:grid;grid-template-columns:minmax(0,1.1fr) minmax(340px,.9fr);overflow:hidden;border:1px solid rgba(255,255,255,.54);border-radius:20px;background:rgba(245,249,255,.53);box-shadow:0 34px 90px rgba(27,56,96,.22);backdrop-filter:blur(30px) saturate(128%);-webkit-backdrop-filter:blur(30px) saturate(128%);transform:translateY(18px) scale(.98);transition:transform .34s cubic-bezier(.22,1,.36,1)}
+.archive-viewer.is-open .archive-viewer-card{transform:none}
+.archive-viewer:not(.has-copy) .archive-viewer-card{grid-template-columns:1fr;width:min(880px,100%)}
+.archive-viewer:not(.has-copy) .archive-viewer-copy{display:none}
+.archive-viewer-media{position:relative;min-width:0;min-height:0;background:rgba(18,39,69,.12);display:grid;place-items:center;overflow:hidden}
+.archive-viewer-media img,.archive-viewer-media video{width:100%;height:100%;object-fit:contain;background:rgba(4,12,24,.86)}
+.archive-viewer-placeholder{width:100%;height:100%;min-height:360px;display:grid;place-items:center;padding:36px;text-align:center;background:radial-gradient(circle at 35% 35%,rgba(111,163,235,.28),transparent 35%),linear-gradient(145deg,rgba(222,235,252,.66),rgba(171,205,246,.34));font-family:var(--pixel);font-size:9px;line-height:1.7;color:rgba(32,70,120,.62)}
+.archive-viewer-placeholder small{font-family:var(--font-body);font-size:.84rem;font-weight:650;line-height:1.55;color:rgba(24,53,91,.58)}
+.archive-viewer-copy{min-height:0;overflow:auto;padding:72px 38px 38px;scrollbar-width:none;-ms-overflow-style:none}
+.archive-viewer-copy::-webkit-scrollbar{display:none}
+.archive-viewer-category{font-family:var(--pixel);font-size:7px;letter-spacing:1px;color:var(--blue-500)}
+.archive-viewer-copy h2{margin-top:15px;font-size:clamp(2rem,4vw,3.2rem);line-height:.99;letter-spacing:-.05em}
+.archive-viewer-text{margin-top:26px;white-space:pre-wrap;font-size:1.02rem;line-height:1.75;color:rgba(14,32,59,.74)}
+.archive-viewer-signature{display:block;margin-top:24px;font-size:.95rem;font-style:italic;font-weight:800;color:var(--blue-500)}
+.archive-viewer-close,.archive-lock-close{position:absolute;top:16px;right:16px;width:42px;height:42px;border-radius:13px;border:1px solid rgba(45,78,124,.12);background:rgba(255,255,255,.38);color:var(--navy-900);font:900 1.25rem/1 var(--font-body);cursor:pointer;z-index:6}
+.archive-carousel-nav{position:absolute;left:18px;right:18px;bottom:18px;display:flex;justify-content:center;align-items:center;gap:16px;z-index:5}
+.archive-carousel-nav[hidden]{display:none}
+.archive-carousel-nav button{width:40px;height:40px;border:1px solid rgba(255,255,255,.18);border-radius:12px;background:rgba(5,16,31,.58);color:white;font-size:1.25rem;cursor:pointer;backdrop-filter:blur(12px)}
+.archive-carousel-nav span{min-width:54px;text-align:center;padding:9px 10px;border-radius:10px;background:rgba(5,16,31,.52);color:white;font:700 .75rem/1 var(--font-body)}
+
+.archive-lock-card{position:relative;width:min(460px,100%);padding:34px 26px 26px;border:1px solid rgba(255,255,255,.60);border-radius:20px;background:rgba(245,249,255,.58);box-shadow:0 30px 80px rgba(27,56,96,.20);backdrop-filter:blur(28px) saturate(128%);-webkit-backdrop-filter:blur(28px) saturate(128%);transform:translateY(15px) scale(.98);transition:transform .32s cubic-bezier(.22,1,.36,1)}
+.archive-lock-backdrop.is-open .archive-lock-card{transform:none}
+.archive-lock-kicker{font-family:var(--pixel);font-size:7px;letter-spacing:1px;color:var(--blue-500)}
+.archive-lock-card h2{margin-top:15px;padding-right:48px;font-size:2rem;line-height:1.02;letter-spacing:-.045em}
+.archive-lock-card p{margin-top:13px;font-size:.95rem;line-height:1.6;color:rgba(14,32,59,.64)}
+.archive-lock-action{display:block;width:100%;margin-top:22px;border:0;border-radius:13px;padding:14px 16px;background:#061426;color:white;font:800 .92rem/1 var(--font-body);text-align:center;text-decoration:none;cursor:pointer;transition:transform .2s ease,filter .2s ease}
+.archive-lock-action:hover,.archive-lock-action:focus-visible{transform:translateY(-2px);filter:brightness(1.12);outline:none}
+
+:root[data-theme="dark"] .archive-shuffle{background:rgba(255,255,255,.045);border-color:rgba(164,201,253,.12);color:#edf5ff}
+:root[data-theme="dark"] .archive-shuffle:hover{background:rgba(118,168,235,.12)}
+:root[data-theme="dark"] .archive-counter{color:rgba(188,215,251,.48)}
+:root[data-theme="dark"] .archive-card{background:rgba(7,16,30,.46);border-color:rgba(164,201,253,.12);box-shadow:0 18px 42px rgba(0,0,0,.16)}
+:root[data-theme="dark"] .archive-card p{color:rgba(226,237,255,.70)}
+:root[data-theme="dark"] .archive-text-orb{background:radial-gradient(circle at 30% 30%,rgba(89,143,219,.22),transparent 38%),linear-gradient(145deg,rgba(30,57,94,.36),rgba(8,20,38,.24));color:rgba(177,210,252,.62)}
+:root[data-theme="dark"] .archive-media-fallback{background:linear-gradient(145deg,rgba(25,50,83,.74),rgba(8,21,40,.60));color:rgba(189,217,252,.72)}
+:root[data-theme="dark"] .archive-media-fallback small{color:rgba(221,235,255,.54)}
+:root[data-theme="dark"] .archive-card.is-cycle-locked::after{background:rgba(3,10,20,.48);color:#cfe2ff}
+:root[data-theme="dark"] .archive-viewer,:root[data-theme="dark"] .archive-lock-backdrop{background:rgba(2,8,17,.34)}
+:root[data-theme="dark"] .archive-viewer-card,:root[data-theme="dark"] .archive-lock-card{background:rgba(7,16,30,.62);border-color:rgba(166,201,255,.14);box-shadow:0 34px 90px rgba(0,0,0,.34)}
+:root[data-theme="dark"] .archive-viewer-text,:root[data-theme="dark"] .archive-lock-card p{color:rgba(226,237,255,.66)}
+:root[data-theme="dark"] .archive-viewer-close,:root[data-theme="dark"] .archive-lock-close{background:rgba(255,255,255,.05);border-color:rgba(166,201,255,.13);color:#edf5ff}
+:root[data-theme="dark"] .archive-viewer-placeholder{background:radial-gradient(circle at 35% 35%,rgba(75,126,197,.24),transparent 35%),linear-gradient(145deg,rgba(21,45,78,.76),rgba(6,18,35,.62));color:rgba(198,222,253,.70)}
+:root[data-theme="dark"] .archive-viewer-placeholder small{color:rgba(220,235,255,.54)}
+:root[data-theme="dark"] .archive-lock-action{background:#e7f0ff;color:#07101d}
+
+@media(max-width:920px){.archive-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.archive-viewer-card{grid-template-columns:1fr 1fr}.archive-viewer-copy{padding:64px 26px 28px}}
+@media(max-width:680px){.archive-grid{grid-template-columns:1fr;gap:14px}.archive-card.is-wide{grid-column:auto}.archive-card{min-height:300px}.archive-viewer,.archive-lock-backdrop{padding:14px}.archive-viewer-card{height:min(88vh,820px);grid-template-columns:1fr;grid-template-rows:minmax(260px,46%) minmax(0,1fr);border-radius:17px}.archive-viewer:not(.has-copy) .archive-viewer-card{grid-template-rows:1fr}.archive-viewer-copy{padding:30px 22px 26px}.archive-viewer-copy h2{font-size:2rem}.archive-viewer-close{top:10px;right:10px}.archive-lock-card{padding:30px 20px 22px;border-radius:17px}.archive-lock-card h2{font-size:1.75rem}.archive-toolbar{flex-direction:column}.archive-counter{text-align:center}}
+.archive-media-fallback.is-visible{z-index:2!important}.archive-card-media.is-missing{opacity:0}
+
+
+/* ====================================================================
+   v58 — feed mais slim, poesia estilo post e navegação contínua
+   ==================================================================== */
+.archive-toolbar{margin-top:24px;gap:8px}
+.archive-shuffle{
+  width:42px;height:42px;padding:0;display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.13);border-radius:11px;
+  background:rgba(4,12,24,.76);color:#edf5ff;
+  box-shadow:0 10px 26px rgba(4,12,24,.10);
+  backdrop-filter:blur(18px) saturate(118%);-webkit-backdrop-filter:blur(18px) saturate(118%);
+}
+.archive-shuffle svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.archive-shuffle:hover,.archive-shuffle:focus-visible{background:rgba(4,12,24,.90);box-shadow:0 12px 28px rgba(4,12,24,.18)}
+:root[data-theme="dark"] .archive-shuffle{background:rgba(2,8,17,.62);border-color:rgba(183,213,255,.13);color:#edf5ff}
+:root[data-theme="dark"] .archive-shuffle:hover{background:rgba(1,6,13,.84)}
+.archive-counter{display:none!important}
+
+.archive-grid{gap:14px}
+.archive-card{
+  min-height:0;border-color:rgba(80,118,169,.08);border-radius:9px;
+  box-shadow:0 11px 28px rgba(48,78,121,.07);background:rgba(248,250,255,.30);
+}
+.archive-card:hover,.archive-card:focus-visible{border-color:rgba(111,161,230,.20);box-shadow:0 20px 44px rgba(38,72,119,.12)}
+:root[data-theme="dark"] .archive-card{border-color:rgba(164,201,253,.075);border-radius:9px;background:rgba(7,16,30,.38);box-shadow:0 13px 30px rgba(0,0,0,.13)}
+
+/* Poesias/elogios funcionam como posts de texto: sem mostrar a mídia inteira no feed. */
+.archive-card.is-text-post{min-height:230px;grid-column:span 1!important;justify-content:center}
+.archive-card-copy--text{min-height:230px;padding:30px 25px 25px;justify-content:center;gap:11px}
+.archive-card.is-poem h2{font-size:clamp(1.35rem,2vw,1.72rem)}
+.archive-card.is-poem p,.archive-card.is-compliment p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.archive-poem-media-hint{margin-top:4px;font:6px/1.7 var(--pixel);letter-spacing:.7px;text-transform:uppercase;color:rgba(77,134,214,.58)}
+.archive-card-sign,.archive-viewer-signature{
+  font-family:var(--pixel)!important;font-style:normal!important;font-weight:400!important;
+  font-size:7px!important;line-height:1.8;letter-spacing:.45px;
+}
+.archive-card-sign,.archive-viewer-signature,.archive-card-category,.archive-viewer-category,.archive-poem-media-hint,.archive-lock-kicker{
+  background:linear-gradient(105deg,#3977d0 0%,#5794e7 39%,#e8f5ff 48%,#fff 51%,#8bc0ff 56%,#3977d0 100%);
+  background-size:360% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent;
+  animation:archivePixelShine 16s linear infinite;will-change:background-position;
+}
+@keyframes archivePixelShine{0%{background-position:165% 50%}100%{background-position:-165% 50%}}
+
+/* Mídia fica limpa no feed. Comentários/títulos aparecem somente ao expandir. */
+.archive-card.is-media-post{min-height:320px}
+.archive-card.is-media-post.is-wide{min-height:335px}
+.archive-card.is-media-post .archive-card-media-wrap{min-height:320px;height:100%;flex:1}
+.archive-card.is-media-post .archive-card-media{min-height:320px}
+.archive-media-category{position:absolute;left:12px;bottom:12px;padding:7px 8px;border-radius:8px;background:rgba(3,11,22,.58);color:#fff;font:6px/1 var(--pixel);letter-spacing:.65px;backdrop-filter:blur(10px);z-index:3}
+.archive-card.is-media-post .archive-carousel-count{position:absolute;right:12px;bottom:12px;z-index:3;min-width:30px;padding:7px 8px;border-radius:8px;background:rgba(3,11,22,.58);color:#fff;text-align:center}
+.archive-new-badge,.archive-lock-badge{border-radius:8px}
+.archive-card.is-protected .archive-card-copy--text h2,
+.archive-card.is-protected .archive-card-copy--text p,
+.archive-card.is-protected .archive-card-copy--text .archive-card-sign,
+.archive-card.is-protected .archive-card-copy--text .archive-poem-media-hint{filter:blur(5px);user-select:none}
+
+/* Modal mais reto e navegação de publicação anterior/próxima. */
+.archive-viewer-card{border-color:rgba(80,118,169,.10);border-radius:12px}
+.archive-lock-card{border-color:rgba(80,118,169,.10);border-radius:12px}
+.archive-viewer-close,.archive-lock-close{border-radius:10px}
+.archive-post-nav{
+  position:fixed;top:50%;transform:translateY(-50%);z-index:960;width:46px;height:54px;
+  border:1px solid rgba(255,255,255,.14);border-radius:11px;background:rgba(3,11,22,.60);color:#fff;
+  font:400 2rem/1 var(--font-body);cursor:pointer;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  transition:transform .2s ease,background .2s ease,opacity .2s ease;
+}
+.archive-post-prev{left:max(16px,calc(50% - 610px))}.archive-post-next{right:max(16px,calc(50% - 610px))}
+.archive-post-nav:hover,.archive-post-nav:focus-visible{background:rgba(3,11,22,.88);transform:translateY(-50%) scale(1.04);outline:none}
+.archive-post-swap{animation:archivePostSwap .28s cubic-bezier(.22,1,.36,1)}
+@keyframes archivePostSwap{0%{opacity:.55;transform:translateX(10px) scale(.992)}100%{opacity:1;transform:none}}
+
+/* A trava surpresa após a etapa inicial não denuncia a quantidade antes da hora. */
+.archive-card.is-cycle-locked{opacity:.48;filter:saturate(.62)}
+.archive-card.is-cycle-locked::after{content:"ENTRAR";font-size:7px}
+
+@media(max-width:680px){
+  .archive-grid{gap:11px}
+  .archive-card.is-text-post,.archive-card-copy--text{min-height:205px}
+  .archive-card.is-media-post,.archive-card.is-media-post .archive-card-media-wrap,.archive-card.is-media-post .archive-card-media{min-height:290px}
+  .archive-post-nav{position:absolute;top:auto;bottom:18px;transform:none;width:42px;height:42px}
+  .archive-post-prev{left:18px}.archive-post-next{right:18px}
+  .archive-post-nav:hover,.archive-post-nav:focus-visible{transform:scale(1.04)}
+}
+
+.archive-lock-action.is-plan-route{background:rgba(19,58,108,.90);color:#f5f9ff;box-shadow:0 10px 24px rgba(19,58,108,.15)}
+.archive-lock-action.is-plan-route:hover,.archive-lock-action.is-plan-route:focus-visible{background:rgba(13,46,91,.98)}
+:root[data-theme="dark"] .archive-lock-action.is-plan-route{background:rgba(55,112,187,.76);color:#f5f9ff}
+
+
+/* ====================================================================
+   v59 — respiro maior no hero + shuffle lateral + grade mobile 3 colunas
+   ==================================================================== */
+.archive-hero{
+  margin-bottom:92px;
+}
+.archive-feed-bar{
+  width:100%;
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  margin:-50px 0 18px;
+  padding-right:2px;
+}
+.archive-feed-bar .archive-shuffle{
+  background:rgba(2,8,17,.88);
+  border-color:rgba(255,255,255,.12);
+  box-shadow:0 10px 26px rgba(2,8,17,.14);
+}
+.archive-feed-bar .archive-shuffle:hover,
+.archive-feed-bar .archive-shuffle:focus-visible{
+  background:rgba(1,5,11,.97);
+  box-shadow:0 13px 30px rgba(2,8,17,.22);
+}
+:root[data-theme="dark"] .archive-feed-bar .archive-shuffle{
+  background:rgba(1,6,13,.72);
+}
+:root[data-theme="dark"] .archive-feed-bar .archive-shuffle:hover,
+:root[data-theme="dark"] .archive-feed-bar .archive-shuffle:focus-visible{
+  background:rgba(0,3,8,.92);
+}
+
+/* Em celular o feed vira uma grade de miniaturas 3x, como um perfil do Instagram.
+   Posts horizontais continuam podendo ocupar duas colunas. */
+@media(max-width:680px){
+  .archive-hero{margin-bottom:72px}
+  .archive-feed-bar{margin:-42px 0 8px;padding-right:0}
+  .archive-feed-bar .archive-shuffle{width:38px;height:38px;border-radius:10px}
+  .archive-feed-bar .archive-shuffle svg{width:16px;height:16px}
+
+  .archive-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    grid-auto-flow:dense;
+    gap:4px;
+  }
+  .archive-card{
+    width:100%;
+    min-width:0;
+    min-height:0!important;
+    aspect-ratio:1/1;
+    border-radius:5px!important;
+    box-shadow:none;
+  }
+  .archive-card.is-wide{
+    grid-column:span 2;
+    aspect-ratio:2/1;
+    min-height:0!important;
+  }
+  .archive-card:hover,.archive-card:focus-visible{
+    transform:none;
+    box-shadow:none;
+  }
+
+  .archive-card.is-media-post,
+  .archive-card.is-media-post .archive-card-media-wrap,
+  .archive-card.is-media-post .archive-card-media{
+    min-height:0!important;
+    height:100%;
+  }
+  .archive-card.is-media-post .archive-card-media-wrap{position:absolute;inset:0}
+  .archive-card-media{object-fit:cover}
+  .archive-card.is-wide .archive-card-media{object-fit:cover}
+  .archive-media-category{left:5px;bottom:5px;padding:4px 5px;border-radius:5px;font-size:4px;letter-spacing:.35px}
+  .archive-card.is-media-post .archive-carousel-count{right:5px;bottom:5px;padding:4px 5px;border-radius:5px;font-size:4px;min-width:20px}
+
+  .archive-card.is-text-post{
+    min-height:0!important;
+    justify-content:stretch;
+    aspect-ratio:1/1;
+  }
+  .archive-card-copy--text{
+    min-height:0!important;
+    height:100%;
+    padding:11px 9px 9px;
+    gap:5px;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .archive-card-category{font-size:4.5px;letter-spacing:.45px;line-height:1.45}
+  .archive-card.is-poem h2,.archive-card.is-compliment h2{
+    font-size:clamp(.72rem,3.2vw,.92rem);
+    line-height:1.02;
+    letter-spacing:-.035em;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .archive-card.is-poem p,.archive-card.is-compliment p{
+    font-size:clamp(.5rem,2.25vw,.64rem);
+    line-height:1.35;
+    -webkit-line-clamp:2;
+  }
+  .archive-card-sign{
+    font-size:4.3px!important;
+    line-height:1.45!important;
+    letter-spacing:.2px!important;
+    display:-webkit-box;
+    -webkit-line-clamp:1;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .archive-poem-media-hint{display:none}
+  .archive-new-badge,.archive-lock-badge{
+    top:5px;padding:4px 5px;border-radius:5px;font-size:4px;letter-spacing:.3px;
+  }
+  .archive-new-badge{left:5px}.archive-lock-badge{right:5px}
+}
+
+@media(max-width:390px){
+  .archive-grid{gap:3px}
+  .archive-card-copy--text{padding:10px 7px 7px;gap:4px}
+  .archive-card.is-poem h2,.archive-card.is-compliment h2{font-size:.72rem}
+  .archive-card.is-poem p,.archive-card.is-compliment p{font-size:.5rem}
+  .archive-card-sign{font-size:4px!important}
+}
+
+
+/* ====================================================================
+   v62 — identidade M❤R + navegação central + feed realmente contínuo
+   ==================================================================== */
+.archive-title{display:flex;flex-direction:column;align-items:center;gap:0;line-height:.88}
+.archive-title-mark{display:block;font:inherit;line-height:.88;letter-spacing:-.055em;margin-top:8px}
+.archive-hero .page-lead{max-width:800px;line-height:1.78}
+.archive-sentinel{height:2px;width:100%;pointer-events:none}
+
+/* As setas de publicação ficam centralizadas verticalmente, inclusive no celular. */
+.archive-post-nav{top:50%!important;bottom:auto!important;transform:translateY(-50%)!important;display:grid;place-items:center;text-align:center;padding:0}
+.archive-post-nav:hover,.archive-post-nav:focus-visible{transform:translateY(-50%) scale(1.04)!important}
+@media(max-width:680px){
+  .archive-post-nav{position:fixed!important;top:50%!important;bottom:auto!important;width:40px;height:46px;border-radius:9px}
+  .archive-post-prev{left:8px!important}.archive-post-next{right:8px!important}
+}
+
+
+/* ====================================================================
+   v64 — ACERVO: legibilidade, acessibilidade e bloqueio visual simples
+   ==================================================================== */
+/* Cards um pouco mais retos e borda quase imperceptível. */
+.archive-card{
+  border-radius:6px;
+  border-color:rgba(72,108,158,.055);
+}
+:root[data-theme="dark"] .archive-card{
+  border-radius:6px;
+  border-color:rgba(164,201,253,.055);
+}
+
+/* Tipografia do feed maior para leitura confortável, sem perder o visual compacto. */
+.archive-card-category{
+  font-size:8.5px;
+  letter-spacing:1.05px;
+}
+.archive-card h2{
+  font-size:1.5rem;
+  line-height:1.08;
+}
+.archive-card p{
+  font-size:.98rem;
+  line-height:1.6;
+}
+.archive-card-sign,
+.archive-viewer-signature{
+  font-size:8.5px!important;
+  line-height:1.85;
+  letter-spacing:.5px;
+}
+.archive-poem-media-hint{font-size:7.5px}
+.archive-new-badge{font-size:7px;padding:7px 9px}
+.archive-viewer-category,.archive-lock-kicker{font-size:8.5px}
+.archive-viewer-text{font-size:1.08rem;line-height:1.78}
+
+/* O conteúdo protegido usa apenas um cadeado, sem a palavra PROTEGIDO sobre o card. */
+.archive-lock-badge{
+  width:30px;height:30px;padding:0;
+  display:grid;place-items:center;
+  border-radius:8px;
+  background:rgba(5,16,31,.72);
+  color:#f2f7ff;
+}
+.archive-lock-badge svg{
+  width:14px;height:14px;
+  fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+:root[data-theme="dark"] .archive-lock-badge{
+  background:rgba(2,8,17,.72);
+  color:#edf5ff;
+}
+
+/* Mobile continua com 3 colunas, mas prioriza leitura: menos texto e letras maiores. */
+@media(max-width:680px){
+  .archive-card{border-radius:3px!important}
+  .archive-card-copy--text{
+    padding:12px 9px 10px;
+    gap:6px;
+  }
+  .archive-card-category{
+    font-size:6.5px;
+    letter-spacing:.55px;
+    line-height:1.5;
+  }
+  .archive-card.is-poem h2,.archive-card.is-compliment h2{
+    font-size:clamp(.9rem,3.7vw,1.05rem);
+    line-height:1.04;
+    -webkit-line-clamp:2;
+  }
+  .archive-card.is-poem p,.archive-card.is-compliment p{
+    font-size:clamp(.64rem,2.7vw,.74rem);
+    line-height:1.35;
+    -webkit-line-clamp:1;
+  }
+  .archive-card-sign{
+    font-size:6.4px!important;
+    line-height:1.5!important;
+    letter-spacing:.25px!important;
+    -webkit-line-clamp:1;
+  }
+  .archive-new-badge{
+    top:5px;left:5px;
+    padding:4px 6px;
+    font-size:5.5px;
+    letter-spacing:.35px;
+  }
+  .archive-lock-badge{
+    top:5px;right:5px;
+    width:24px;height:24px;padding:0;
+    border-radius:6px;
+  }
+  .archive-lock-badge svg{width:12px;height:12px}
+  .archive-media-category{
+    font-size:5.5px;
+    padding:4px 5px;
+  }
+  .archive-card.is-media-post .archive-carousel-count{
+    font-size:5.5px;
+  }
+}
+@media(max-width:390px){
+  .archive-card-copy--text{padding:11px 8px 9px;gap:5px}
+  .archive-card-category{font-size:6px}
+  .archive-card.is-poem h2,.archive-card.is-compliment h2{font-size:.88rem}
+  .archive-card.is-poem p,.archive-card.is-compliment p{font-size:.62rem}
+  .archive-card-sign{font-size:6px!important}
+}
+
+/* ====================================================================
+   v65 — ACERVO: clique desktop, busca, contador afetivo e título em caixa alta
+   ==================================================================== */
+.archive-title [data-archive-title-main]{text-transform:uppercase}
+.archive-grid{position:relative;z-index:1}
+.archive-card{pointer-events:auto;touch-action:manipulation}
+.archive-card>*{pointer-events:auto}
+
+.archive-feed-bar{gap:9px}
+.archive-search{height:42px;display:flex;align-items:center;justify-content:flex-end;position:relative}
+.archive-search-toggle{
+  width:42px;height:42px;display:grid;place-items:center;padding:0;border-radius:11px;
+  border:1px solid rgba(255,255,255,.11);background:rgba(2,8,17,.84);color:#f5f9ff;
+  cursor:pointer;backdrop-filter:blur(16px) saturate(118%);-webkit-backdrop-filter:blur(16px) saturate(118%);
+  transition:background .2s ease,transform .2s ease,border-color .2s ease;
+}
+.archive-search-toggle:hover,.archive-search-toggle:focus-visible{background:rgba(1,5,11,.97);transform:translateY(-1px);outline:none}
+.archive-search-toggle svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.archive-search input{
+  width:0;opacity:0;pointer-events:none;margin-right:-1px;padding:0;border:0;outline:0;
+  height:42px;border-radius:11px 0 0 11px;background:rgba(247,250,255,.68);color:var(--navy-950);
+  font:700 .82rem/1 var(--font-body);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  transition:width .28s cubic-bezier(.22,1,.36,1),opacity .2s ease,padding .28s ease;
+}
+.archive-search.is-open input{width:min(260px,34vw);opacity:1;pointer-events:auto;padding:0 14px;border:1px solid rgba(44,77,121,.10);border-right:0}
+.archive-search.is-open .archive-search-toggle{border-radius:0 11px 11px 0}
+.archive-search input::-webkit-search-cancel-button{cursor:pointer}
+:root[data-theme="dark"] .archive-search input{background:rgba(8,20,38,.78);color:#edf5ff;border-color:rgba(156,198,255,.11)}
+:root[data-theme="dark"] .archive-search-toggle{background:rgba(1,6,13,.76)}
+.archive-empty{grid-column:1/-1;min-height:220px;display:grid;place-items:center;padding:34px;text-align:center;font:700 1rem/1.6 var(--font-body);color:rgba(18,43,76,.58)}
+:root[data-theme="dark"] .archive-empty{color:rgba(224,236,253,.62)}
+
+.archive-viewer-usage{
+  display:inline-flex;align-items:center;width:max-content;max-width:100%;margin:0 0 4px;padding:7px 9px;
+  border-radius:8px;background:rgba(7,21,41,.78);color:#eaf3ff;font-family:var(--pixel);font-size:7px;line-height:1.5;
+  letter-spacing:.65px;box-shadow:0 8px 22px rgba(12,36,70,.10);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)
+}
+.archive-viewer-usage[hidden]{display:none}
+:root[data-theme="dark"] .archive-viewer-usage{background:rgba(63,118,190,.22);border:1px solid rgba(145,190,249,.10);color:#dcecff}
+
+@media(max-width:680px){
+  .archive-feed-bar{gap:6px}
+  .archive-search,.archive-search-toggle{height:38px}
+  .archive-search-toggle{width:38px;border-radius:10px}
+  .archive-search.is-open input{width:min(190px,58vw);height:38px;padding:0 11px;font-size:.75rem}
+  .archive-search.is-open .archive-search-toggle{border-radius:0 10px 10px 0}
+  .archive-viewer-usage{font-size:6.5px;padding:6px 8px}
+}
+
+
+/* ====================================================================
+   v66 — ACERVO: busca integrada, cards de pesquisa 1:1 e tipografia desktop
+   ==================================================================== */
+/* Busca com borda única e proporções mais confortáveis no desktop. */
+.archive-search{
+  height:48px;
+  border-radius:12px;
+}
+.archive-search-toggle{
+  width:48px;height:48px;
+  flex:0 0 48px;
+  border-radius:12px;
+  border-color:rgba(39,73,120,.14);
+  box-shadow:0 9px 24px rgba(3,12,25,.10);
+}
+.archive-search-toggle svg{width:18px;height:18px}
+.archive-search input{
+  height:48px;
+  border-radius:0 12px 12px 0;
+  font-size:.88rem;
+  border:1px solid transparent;
+  border-left:0;
+}
+.archive-search.is-open{
+  background:rgba(247,250,255,.62);
+  border:1px solid rgba(43,76,120,.12);
+  box-shadow:0 10px 28px rgba(28,58,99,.08);
+  backdrop-filter:blur(18px) saturate(118%);
+  -webkit-backdrop-filter:blur(18px) saturate(118%);
+}
+.archive-search.is-open .archive-search-toggle{
+  border:0;
+  border-radius:11px 0 0 11px;
+  box-shadow:none;
+}
+.archive-search.is-open input{
+  width:min(300px,36vw);
+  border:0;
+  border-radius:0 11px 11px 0;
+  background:transparent;
+  padding:0 16px 0 13px;
+}
+:root[data-theme="dark"] .archive-search.is-open{
+  background:rgba(5,15,30,.78);
+  border-color:rgba(160,201,255,.12);
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+:root[data-theme="dark"] .archive-search input{background:transparent}
+
+/* No desktop, o feed fica um pouco mais editorial e menos "texto gigante". */
+@media(min-width:681px){
+  .archive-card h2{font-size:1.34rem;line-height:1.1}
+  .archive-card p{font-size:.91rem;line-height:1.58}
+  .archive-card-category{font-size:7.5px}
+  .archive-card-sign{font-size:7.5px!important;line-height:1.72!important}
+  .archive-card-copy{padding:19px 20px 20px;gap:8px}
+
+  /* Resultados de pesquisa usam um tile 1:1, como uma grade de perfil. */
+  .archive-grid.is-searching .archive-card{
+    aspect-ratio:1/1;
+    min-height:0;
+  }
+  .archive-grid.is-searching .archive-card.is-wide{grid-column:span 1;aspect-ratio:1/1}
+  .archive-grid.is-searching .archive-card.is-text-post{justify-content:stretch}
+  .archive-grid.is-searching .archive-card-copy--text{height:100%;min-height:0;padding:24px 23px;justify-content:center}
+  .archive-grid.is-searching .archive-card.is-media-post .archive-card-media-wrap,
+  .archive-grid.is-searching .archive-card.is-media-post .archive-card-media{height:100%;min-height:0}
+}
+
+@media(max-width:680px){
+  .archive-search{height:40px}
+  .archive-search-toggle{width:40px;height:40px;flex-basis:40px}
+  .archive-search input{height:40px}
+  .archive-search.is-open input{width:min(190px,58vw);height:40px}
+}
+
+
+/* ====================================================================
+   v72 — tiles verticais ocupam duas linhas, não duas colunas
+   ==================================================================== */
+/*
+   Fotos/GIFs/vídeos em retrato são detectados pelo JS. Em vez de roubar
+   duas colunas do feed, o card fica em uma coluna e cresce para baixo,
+   equivalente às posições 1 + 4 de uma grade 3x.
+*/
+.archive-card.is-tall{
+  grid-column:span 1!important;
+  grid-row:span 2;
+  min-height:678px;
+}
+.archive-card.is-tall .archive-card-media-wrap,
+.archive-card.is-tall .archive-card-media{
+  height:100%;
+  min-height:0;
+}
+.archive-card.is-tall .archive-card-media{object-fit:cover}
+
+/* Durante busca, todos os resultados continuam 1:1 para manter a grade limpa. */
+.archive-grid.is-searching .archive-card.is-tall{
+  grid-row:span 1;
+  aspect-ratio:1/1;
+  min-height:0;
+}
+
+@media(max-width:920px) and (min-width:681px){
+  .archive-card.is-tall{min-height:650px}
+}
+
+@media(max-width:680px){
+  .archive-card.is-tall{
+    grid-column:span 1!important;
+    grid-row:span 2;
+    aspect-ratio:1/2!important;
+    min-height:0!important;
+  }
+  .archive-card.is-tall .archive-card-media-wrap,
+  .archive-card.is-tall .archive-card-media{height:100%!important}
+}
+
+/* ====================================================================
+   v73 — enquadramento manual do feed (painel do Acervo)
+   ==================================================================== */
+.archive-card-media{
+  object-position:50% 50%;
+  transform:scale(var(--archive-feed-zoom,1)) rotate(var(--archive-feed-rotate,0deg));
+  transform-origin:center center;
+  transition:transform .28s ease,filter .28s ease,opacity .28s ease;
+}
+.archive-card.is-square{
+  grid-column:span 1!important;
+  grid-row:span 1!important;
+  aspect-ratio:1/1;
+  min-height:0!important;
+}
+.archive-card.is-square .archive-card-media-wrap,
+.archive-card.is-square .archive-card-media{
+  width:100%;height:100%;min-height:0!important;
+}
+.archive-grid.is-searching .archive-card-media{
+  transform:scale(var(--archive-feed-zoom,1)) rotate(var(--archive-feed-rotate,0deg));
+}
+@media(max-width:680px){
+  .archive-card.is-square{aspect-ratio:1/1!important;min-height:0!important}
+  .archive-card.is-square .archive-card-media-wrap,
+  .archive-card.is-square .archive-card-media{height:100%!important}
+}
+.archive-card:hover .archive-card-media{
+  transform:scale(calc(var(--archive-feed-zoom,1) * 1.035)) rotate(var(--archive-feed-rotate,0deg));
+}
+.archive-card.is-protected .archive-card-media{
+  transform:scale(calc(var(--archive-feed-zoom,1) * 1.04)) rotate(var(--archive-feed-rotate,0deg));
+}
+
+/* ====================================================================
+   v74 — textos com mídia: foto borrada + vidro; letras sem rótulo
+   ==================================================================== */
+.archive-card.is-lyric{min-height:230px;grid-column:span 1!important;justify-content:center}
+.archive-card.is-lyric h2{font-size:clamp(1.35rem,2vw,1.72rem)}
+.archive-card.is-lyric p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+
+.archive-card.is-text-post.has-text-media{
+  isolation:isolate;
+  background:rgba(246,250,255,.18);
+}
+.archive-text-backdrop{
+  position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:rgba(10,27,50,.12)
+}
+.archive-text-backdrop-media{
+  width:100%;height:100%;display:block;object-fit:cover;object-position:50% 50%;
+  filter:blur(17px) saturate(.82) brightness(.76);
+  transform:scale(calc(var(--archive-feed-zoom,1) * 1.12)) rotate(var(--archive-feed-rotate,0deg));
+  transform-origin:center;transition:transform .55s cubic-bezier(.22,1,.36,1),filter .4s ease
+}
+.archive-text-backdrop-glass{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(245,249,255,.48),rgba(238,246,255,.64));
+  backdrop-filter:blur(10px) saturate(112%);-webkit-backdrop-filter:blur(10px) saturate(112%);
+  border:1px solid rgba(255,255,255,.18)
+}
+.archive-card.is-text-post.has-text-media .archive-card-copy--text{position:relative;z-index:2}
+.archive-card.is-text-post.has-text-media h2{color:#0a1b32;text-shadow:0 1px 14px rgba(255,255,255,.42)}
+.archive-card.is-text-post.has-text-media p{color:rgba(10,28,52,.72)}
+.archive-card.is-text-post.has-text-media:hover .archive-text-backdrop-media{
+  transform:scale(calc(var(--archive-feed-zoom,1) * 1.16)) rotate(var(--archive-feed-rotate,0deg));
+  filter:blur(15px) saturate(.9) brightness(.8)
+}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media{background:rgba(4,13,26,.20)}
+:root[data-theme="dark"] .archive-text-backdrop-media{filter:blur(18px) saturate(.72) brightness(.48)}
+:root[data-theme="dark"] .archive-text-backdrop-glass{
+  background:linear-gradient(180deg,rgba(5,16,31,.48),rgba(4,14,28,.64));
+  border-color:rgba(171,205,255,.06)
+}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media h2{color:#f1f6ff;text-shadow:0 2px 18px rgba(0,0,0,.38)}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media p{color:rgba(233,242,255,.76)}
+
+/* Se a mídia estiver bloqueada, o fundo fica ainda mais indistinto. */
+.archive-card.is-protected.has-text-media .archive-text-backdrop-media{filter:blur(24px) saturate(.55) brightness(.62);transform:scale(calc(var(--archive-feed-zoom,1) * 1.18)) rotate(var(--archive-feed-rotate,0deg))}
+:root[data-theme="dark"] .archive-card.is-protected.has-text-media .archive-text-backdrop-media{brightness(.34)}
+
+@media(max-width:680px){
+  .archive-card.is-lyric{min-height:0!important;justify-content:stretch;aspect-ratio:1/1}
+  .archive-card.is-lyric h2{font-size:clamp(.9rem,3.7vw,1.05rem);line-height:1.04;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .archive-card.is-lyric p{font-size:clamp(.64rem,2.7vw,.74rem);line-height:1.35;-webkit-line-clamp:1}
+  .archive-text-backdrop-media{filter:blur(12px) saturate(.78) brightness(.72);transform:scale(calc(var(--archive-feed-zoom,1) * 1.16)) rotate(var(--archive-feed-rotate,0deg))}
+  :root[data-theme="dark"] .archive-text-backdrop-media{filter:blur(13px) saturate(.68) brightness(.44)}
+  .archive-text-backdrop-glass{backdrop-filter:blur(7px) saturate(108%);-webkit-backdrop-filter:blur(7px) saturate(108%)}
+}
+@media(max-width:390px){
+  .archive-card.is-lyric h2{font-size:.88rem}
+  .archive-card.is-lyric p{font-size:.62rem}
+}
+
+
+/* ====================================================================
+   v75 — mídia borrada sem afetar texto + assinatura apenas no modal
+   ==================================================================== */
+.archive-card.is-text-post.has-text-media .archive-card-copy--text,
+.archive-card.is-text-post.has-text-media .archive-card-copy--text h2,
+.archive-card.is-text-post.has-text-media .archive-card-copy--text p,
+.archive-card.is-text-post.has-text-media .archive-card-copy--text .archive-card-category{
+  filter:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+.archive-card.is-text-post.has-text-media .archive-text-backdrop-media{
+  filter:blur(22px) saturate(.78) brightness(.70);
+  transform:scale(calc(var(--archive-feed-zoom,1) * 1.16)) rotate(var(--archive-feed-rotate,0deg));
+}
+.archive-card.is-text-post.has-text-media .archive-text-backdrop-glass{
+  background:linear-gradient(180deg,rgba(245,249,255,.28),rgba(238,246,255,.42));
+  backdrop-filter:blur(7px) saturate(108%);
+  -webkit-backdrop-filter:blur(7px) saturate(108%);
+}
+.archive-card.is-text-post.has-text-media h2{color:#081a31;text-shadow:0 1px 12px rgba(255,255,255,.55)}
+.archive-card.is-text-post.has-text-media p{color:rgba(8,26,49,.82)}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media .archive-text-backdrop-media{filter:blur(23px) saturate(.70) brightness(.42)}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media .archive-text-backdrop-glass{background:linear-gradient(180deg,rgba(5,16,31,.30),rgba(4,14,28,.46))}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media h2{color:#f4f8ff}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media p{color:rgba(239,246,255,.86)}
+/* A assinatura é uma recompensa de abertura: nunca aparece no card do feed. */
+.archive-card-sign{display:none!important}
+/* Em conteúdo protegido, a proteção continua tendo prioridade sobre o texto. */
+.archive-card.is-protected .archive-card-copy--text h2,
+.archive-card.is-protected .archive-card-copy--text p,
+.archive-card.is-protected .archive-card-copy--text .archive-card-category{filter:blur(5px)}
+
+
+/* ====================================================================
+   V79 — TEXTO NÍTIDO + FEED MOBILE MAIS LEGÍVEL E ACESSÍVEL
+   ==================================================================== */
+/* O cadeado limita a abertura do conteúdo, mas não borra mais o teaser textual. */
+.archive-card.is-protected .archive-card-copy p,
+.archive-card.is-protected .archive-card-copy--text h2,
+.archive-card.is-protected .archive-card-copy--text p,
+.archive-card.is-protected .archive-card-copy--text .archive-card-category{
+  filter:none!important;
+  user-select:text!important;
+}
+.archive-card.is-protected.has-text-media .archive-text-backdrop-media{
+  filter:blur(26px) saturate(.55) brightness(.58)!important;
+}
+:root[data-theme="dark"] .archive-card.is-protected.has-text-media .archive-text-backdrop-media{
+  filter:blur(27px) saturate(.52) brightness(.32)!important;
+}
+.archive-card:focus-visible{outline:3px solid rgba(77,134,214,.55)!important;outline-offset:3px!important}
+.archive-viewer-close:focus-visible,.archive-lock-close:focus-visible,.archive-post-nav:focus-visible,.archive-carousel-nav button:focus-visible,.archive-search-toggle:focus-visible,.archive-shuffle:focus-visible{outline:3px solid rgba(77,134,214,.50)!important;outline-offset:2px!important}
+.archive-viewer-close,.archive-lock-close,.archive-post-nav,.archive-carousel-nav button,.archive-search-toggle,.archive-shuffle{min-width:44px;min-height:44px}
+
+@media(max-width:680px){
+  /* Fotos continuam na grade 3x; posts de leitura ganham duas colunas para não virar texto microscópico. */
+  .archive-card.is-text-post{
+    grid-column:span 2!important;
+    grid-row:span 1!important;
+    aspect-ratio:2/1!important;
+    min-height:0!important;
+  }
+  .archive-card.is-text-post .archive-card-copy--text{
+    min-height:0!important;height:100%;padding:14px 13px 12px;gap:6px;justify-content:center;
+  }
+  .archive-card.is-text-post .archive-card-category{font-size:6.8px;line-height:1.45;letter-spacing:.55px}
+  .archive-card.is-poem h2,.archive-card.is-compliment h2,.archive-card.is-lyric h2{
+    font-size:clamp(1rem,4.6vw,1.2rem);line-height:1.06;-webkit-line-clamp:2;
+  }
+  .archive-card.is-poem p,.archive-card.is-compliment p,.archive-card.is-lyric p{
+    font-size:clamp(.72rem,3.1vw,.82rem);line-height:1.38;-webkit-line-clamp:2;
+  }
+  .archive-card.is-text-post.has-text-media .archive-text-backdrop-glass{
+    background:linear-gradient(180deg,rgba(245,249,255,.34),rgba(238,246,255,.52));
+    backdrop-filter:blur(8px) saturate(106%);-webkit-backdrop-filter:blur(8px) saturate(106%);
+  }
+  :root[data-theme="dark"] .archive-card.is-text-post.has-text-media .archive-text-backdrop-glass{
+    background:linear-gradient(180deg,rgba(5,16,31,.34),rgba(4,14,28,.54));
+  }
+  .archive-viewer,.archive-lock-backdrop{padding:10px}
+  .archive-viewer-card{width:100%;height:min(91dvh,860px);border-radius:12px;grid-template-rows:minmax(220px,42%) minmax(0,1fr)}
+  .archive-viewer-copy{padding:30px 20px 26px}
+  .archive-viewer-text{font-size:1rem;line-height:1.72}
+  .archive-viewer-close{width:44px;height:44px}
+  .archive-post-nav{width:44px!important;height:48px!important}
+}
+@media(max-width:390px){
+  .archive-card.is-text-post .archive-card-copy--text{padding:12px 10px 10px}
+  .archive-card.is-poem h2,.archive-card.is-compliment h2,.archive-card.is-lyric h2{font-size:.98rem}
+  .archive-card.is-poem p,.archive-card.is-compliment p,.archive-card.is-lyric p{font-size:.7rem}
+}
+@media(prefers-reduced-motion:reduce){
+  .archive-card,.archive-card-media,.archive-text-backdrop-media,.archive-post-nav{transition:none!important;animation:none!important}
+  .archive-card:hover{transform:none!important}
+  .archive-card-sign,.archive-viewer-signature,.archive-card-category,.archive-viewer-category,.archive-poem-media-hint,.archive-lock-kicker{animation:none!important}
+}
+
+/* ====================================================================
+   V80 — GRADE 3x ESTÁVEL, TEXTO NÍTIDO E FEED MAIS LEVE
+   ==================================================================== */
+/* Uma célula = um quadrado. O JS calcula o tamanho e impede dois cards
+   grandes de disputarem a mesma linha. */
+.archive-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-auto-rows:var(--archive-cell-size,auto);
+  grid-auto-flow:row!important;
+  gap:14px;
+  align-items:stretch;
+}
+.archive-card{
+  min-height:0!important;
+  height:100%;
+  aspect-ratio:auto!important;
+  border-radius:5px!important;
+  background:rgba(248,251,255,.42);
+  box-shadow:0 10px 26px rgba(48,78,121,.065);
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  contain:layout paint style;
+}
+.archive-card.is-square,.archive-card.is-text-post{min-height:0!important;height:100%;aspect-ratio:auto!important}
+.archive-card.is-wide{min-height:0!important;height:100%;aspect-ratio:auto!important}
+.archive-card.is-tall{min-height:0!important;height:100%;aspect-ratio:auto!important}
+.archive-card.is-media-post .archive-card-media-wrap{position:absolute;inset:0;min-height:0!important;height:100%!important}
+.archive-card.is-media-post .archive-card-media{width:100%;height:100%!important;min-height:0!important;object-fit:cover}
+.archive-card.is-text-post{justify-content:stretch}
+.archive-card-copy--text{position:relative;z-index:2;width:100%;height:100%;min-height:0!important;padding:22px 21px;gap:8px;justify-content:center;overflow:hidden}
+.archive-card.is-poem,.archive-card.is-compliment,.archive-card.is-lyric{min-height:0!important}
+.archive-card.is-lyric{grid-column:auto!important;min-height:0!important}
+
+/* Sem blur em letras, inclusive em conteúdo bloqueado. O cadeado informa a trava. */
+.archive-card.is-protected .archive-card-copy,
+.archive-card.is-protected .archive-card-copy *,
+.archive-card.is-text-post .archive-card-copy,
+.archive-card.is-text-post .archive-card-copy *{filter:none!important;-webkit-filter:none!important}
+
+/* Foto de apoio: menos leite/blur e mais textura. O texto fica completamente separado. */
+.archive-card.is-text-post.has-text-media{background:rgba(224,237,253,.35)}
+.archive-text-backdrop{background:#cbdcf1}
+.archive-card.is-text-post.has-text-media .archive-text-backdrop-media,
+.archive-card.is-protected.has-text-media .archive-text-backdrop-media{
+  filter:blur(8px) saturate(.90) brightness(.88)!important;
+  transform:scale(calc(var(--archive-feed-zoom,1) * 1.07)) rotate(var(--archive-feed-rotate,0deg))!important;
+}
+.archive-card.is-text-post.has-text-media:hover .archive-text-backdrop-media{
+  filter:blur(7px) saturate(.94) brightness(.90)!important;
+  transform:scale(calc(var(--archive-feed-zoom,1) * 1.09)) rotate(var(--archive-feed-rotate,0deg))!important;
+}
+.archive-card.is-text-post.has-text-media .archive-text-backdrop-glass{
+  background:linear-gradient(180deg,rgba(237,246,255,.18),rgba(220,235,252,.27));
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  border:0;
+}
+.archive-card.is-text-post.has-text-media .archive-text-backdrop-glass::after{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.26;
+  background-image:radial-gradient(circle,rgba(6,24,48,.30) .55px,transparent .72px);
+  background-size:3px 3px;
+  mix-blend-mode:multiply;
+}
+.archive-card.is-text-post.has-text-media h2{color:#071a31!important;text-shadow:none!important}
+.archive-card.is-text-post.has-text-media p{color:rgba(7,26,49,.84)!important;text-shadow:none!important}
+.archive-card.is-text-post.has-text-media .archive-card-category{color:#2169c5!important;-webkit-text-fill-color:currentColor!important;background:none!important}
+
+:root[data-theme="dark"] .archive-card{background:rgba(6,17,32,.56);box-shadow:0 10px 28px rgba(0,0,0,.12)}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media{background:rgba(4,14,28,.48)}
+:root[data-theme="dark"] .archive-text-backdrop{background:#07172a}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media .archive-text-backdrop-media,
+:root[data-theme="dark"] .archive-card.is-protected.has-text-media .archive-text-backdrop-media{
+  filter:blur(9px) saturate(.80) brightness(.54)!important;
+}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media .archive-text-backdrop-glass{background:linear-gradient(180deg,rgba(3,13,27,.17),rgba(3,15,31,.28))}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media .archive-text-backdrop-glass::after{opacity:.24;background-image:radial-gradient(circle,rgba(214,232,255,.27) .5px,transparent .68px);mix-blend-mode:screen}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media h2{color:#f3f7ff!important}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media p{color:rgba(238,245,255,.86)!important}
+:root[data-theme="dark"] .archive-card.is-text-post.has-text-media .archive-card-category{color:#8ec2ff!important}
+
+/* Categoria de poesia/música sempre legível sobre qualquer fundo. */
+.archive-card.is-lyric .archive-card-category,.archive-card.is-poem .archive-card-category{position:relative;z-index:3}
+.archive-card.is-lyric .archive-card-category{white-space:nowrap}
+
+/* Busca continua 1:1, mas usa a mesma altura das células. */
+.archive-grid.is-searching .archive-card{height:var(--archive-cell-size,auto)!important;min-height:0!important;aspect-ratio:auto!important;grid-row:span 1!important;grid-column:span 1!important}
+
+@media(max-width:920px){.archive-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:680px){
+  .archive-grid{gap:4px!important}
+  .archive-card{border-radius:3px!important;box-shadow:none!important;transition:border-color .16s ease,opacity .16s ease!important}
+  .archive-card.is-text-post{grid-column:auto!important;grid-row:auto!important;aspect-ratio:auto!important}
+  .archive-card-copy--text{padding:11px 9px 9px;gap:5px;justify-content:center}
+  .archive-card-category{font-size:5.6px!important;letter-spacing:.48px!important;line-height:1.4}
+  .archive-card.is-poem h2,.archive-card.is-compliment h2,.archive-card.is-lyric h2{font-size:clamp(.75rem,3.25vw,.98rem)!important;line-height:1.04!important;-webkit-line-clamp:2}
+  .archive-card.is-poem p,.archive-card.is-compliment p,.archive-card.is-lyric p{font-size:clamp(.54rem,2.35vw,.67rem)!important;line-height:1.34!important;-webkit-line-clamp:2}
+  .archive-card.is-text-post.has-text-media .archive-text-backdrop-media,.archive-card.is-protected.has-text-media .archive-text-backdrop-media{filter:blur(6px) saturate(.9) brightness(.88)!important;transform:scale(calc(var(--archive-feed-zoom,1) * 1.06)) rotate(var(--archive-feed-rotate,0deg))!important}
+  :root[data-theme="dark"] .archive-card.is-text-post.has-text-media .archive-text-backdrop-media,:root[data-theme="dark"] .archive-card.is-protected.has-text-media .archive-text-backdrop-media{filter:blur(7px) saturate(.78) brightness(.52)!important}
+  .archive-card:hover,.archive-card:focus-visible{transform:none!important;box-shadow:none!important}
+  .archive-card-media{transition:none!important}
+  .archive-media-category,.archive-card.is-media-post .archive-carousel-count{font-size:5px!important;padding:4px 5px!important;bottom:5px!important}
+  .archive-media-category{left:5px!important}.archive-card.is-media-post .archive-carousel-count{right:5px!important}
+  .archive-new-badge{font-size:5px!important;padding:4px 5px!important}.archive-lock-badge{width:24px!important;height:24px!important}
+  .archive-card-category,.archive-viewer-category,.archive-poem-media-hint,.archive-lock-kicker{animation:none!important;will-change:auto!important}
+}
+@media(max-width:390px){
+  .archive-card-copy--text{padding:9px 7px 7px;gap:4px}
+  .archive-card.is-poem h2,.archive-card.is-compliment h2,.archive-card.is-lyric h2{font-size:.72rem!important}
+  .archive-card.is-poem p,.archive-card.is-compliment p,.archive-card.is-lyric p{font-size:.51rem!important}
+}
+@media(hover:none),(pointer:coarse){
+  .archive-card:hover .archive-card-media,.archive-card.is-text-post.has-text-media:hover .archive-text-backdrop-media{transform:scale(var(--archive-feed-zoom,1)) rotate(var(--archive-feed-rotate,0deg))!important}
+}
+
+
+/* ====================================================================
+   V83 — VIEWER ADAPTATIVO: MÍDIA-ONLY / TEXTO-ONLY
+   ==================================================================== */
+/* Foto, vídeo ou carrossel sem conteúdo visível abre apenas a mídia. */
+.archive-viewer.has-media:not(.has-copy) .archive-viewer-card{
+  grid-template-columns:1fr!important;
+  grid-template-rows:1fr!important;
+  width:min(920px,100%);
+}
+.archive-viewer.has-media:not(.has-copy) .archive-viewer-copy{display:none!important}
+.archive-viewer.has-media:not(.has-copy) .archive-viewer-media{display:grid!important}
+
+/* Poesia/trecho/texto sem imagem não ganha um espaço de mídia artificial. */
+.archive-viewer:not(.has-media) .archive-viewer-card{
+  grid-template-columns:1fr!important;
+  grid-template-rows:1fr!important;
+  width:min(760px,100%);
+  height:auto;
+  min-height:min(500px,calc(100dvh - 56px));
+  max-height:calc(100dvh - 56px);
+}
+.archive-viewer:not(.has-media) .archive-viewer-media,
+.archive-viewer:not(.has-media) .archive-carousel-nav{display:none!important}
+.archive-viewer:not(.has-media) .archive-viewer-copy{
+  display:block!important;
+  padding:78px 58px 52px;
+  align-self:center;
+}
+.archive-viewer:not(.has-media) .archive-viewer-text{max-width:62ch}
+
+@media(max-width:680px){
+  .archive-viewer.has-media:not(.has-copy) .archive-viewer-card{height:min(91dvh,860px)}
+  .archive-viewer:not(.has-media) .archive-viewer-card{min-height:min(430px,calc(100dvh - 28px));max-height:calc(100dvh - 28px)}
+  .archive-viewer:not(.has-media) .archive-viewer-copy{padding:70px 24px 34px}
+}
+
+/* ====================================================================
+   V84 — LEITURA LONGA NO VIEWER
+   ==================================================================== */
+/*
+   Posts somente de texto podem ultrapassar a altura da janela.
+   O cartão permanece dentro do viewport e o conteúdo passa a rolar
+   internamente, preservando a tipografia e uma margem confortável no fim.
+*/
+.archive-viewer:not(.has-media) .archive-viewer-card{
+  height:min(90dvh,860px)!important;
+  min-height:0!important;
+  max-height:calc(100dvh - 56px)!important;
+  overflow:hidden;
+}
+.archive-viewer:not(.has-media) .archive-viewer-copy{
+  align-self:stretch!important;
+  height:100%;
+  min-height:0;
+  overflow-y:auto!important;
+  overflow-x:hidden;
+  padding:72px 58px 76px!important;
+  scroll-padding-top:72px;
+  scroll-padding-bottom:76px;
+  overscroll-behavior:contain;
+}
+.archive-viewer:not(.has-media) .archive-viewer-signature{
+  margin-bottom:4px;
+}
+
+@media(max-width:680px){
+  .archive-viewer:not(.has-media) .archive-viewer-card{
+    height:calc(100dvh - 28px)!important;
+    max-height:calc(100dvh - 28px)!important;
+  }
+  .archive-viewer:not(.has-media) .archive-viewer-copy{
+    padding:68px 24px 54px!important;
+    scroll-padding-top:68px;
+    scroll-padding-bottom:54px;
+  }
+}

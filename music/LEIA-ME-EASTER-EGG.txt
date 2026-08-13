@@ -1,0 +1,11 @@
+EASTER EGG — NOSSA MÚSICA
+
+Para ativar o easter egg musical, coloque uma faixa nesta pasta com o nome:
+
+nossa-musica.mp3
+
+O gatilho secreto é clicar 3 vezes em M❤R no título do Acervo.
+Se o arquivo ainda não existir, o site apenas mostra uma pequena mensagem e continua normalmente.
+
+Outro easter egg já funciona sem arquivo extra:
+clique 5 vezes rapidamente no logo “nós dois” para uma chuva grande de corações.

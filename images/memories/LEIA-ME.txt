@@ -1,0 +1,8 @@
+MEMÓRIAS FINAIS
+
+O conjunto de três fotos do final já está preparado para:
+- photo.01.jpg
+- photo.02.jpg
+- photo.03.jpg
+
+Coloque os três arquivos nesta pasta exatamente com esses nomes.

@@ -1,0 +1,652 @@
+NOSSO CAPÍTULO — v65
+============================================================
+
+Este arquivo virou o histórico geral do projeto para facilitar a consulta depois de tantas revisões kkkk.
+
+ESTRUTURA ATUAL
+------------------------------------------------------------
+index.html      -> página principal / timeline / renovação / contrato / vouchers / memórias
+planos.html     -> comparação e escolha de Namoro / Casamento / Casamento Plus
+acervo.html     -> feed embaralhável com poesias, elogios, fotos, prints, vídeos e referências
+
+css/
+  variables.css -> cores, fontes e variáveis globais
+  fonts.css     -> importação das fontes
+  style.css     -> página principal, contrato, vouchers, rodapé etc.
+  subpages.css  -> base visual das páginas internas
+  acervo.css    -> grid/feed, carrossel e visual do Acervo
+  player.css    -> player compartilhado
+  theme.css     -> claro / escuro
+  auth.css      -> login e perfil
+
+js/
+  config.js         -> textos principais, timeline, vouchers, contatos e playlist
+  app.js            -> página principal, contrato, vouchers, player e animações
+  subpages.js       -> menu/idioma e base compartilhada das páginas internas
+  acervo.js         -> feed infinito, busca, carrossel, bloqueios, contadores e descoberta inicial
+  planos-auth.js    -> fluxo de escolha dos planos / confirmação / contrato
+  auth.js           -> login e perfil da Mariana
+  progress.js       -> progresso, histórico de contratos, etapas liberadas e comando secreto de reset
+  subpage-player.js -> player das páginas internas
+  theme.js          -> persistência do tema claro/escuro
+
+images/
+  favicon/   -> favicon do site
+  profile/   -> mariana.jpg já recortada para o perfil
+  timeline/  -> fotos da linha do tempo
+  memories/  -> fotos finais / polaroids
+  vouchers/  -> voucher-01.png até voucher-06.png já anexados
+  poesias/   -> imagens opcionais ligadas às poesias
+  acervo/    -> fotos, prints, vídeos, referências e carrosséis do novo feed
+
+music/
+  music-01.mp3 até music-16.mp3 -> playlist local completa
+
+
+LOGIN DA EXPERIÊNCIA
+------------------------------------------------------------
+E-mail: marianajr@nosdois.com
+Senha: aaa@192530
+
+O login funciona localmente com localStorage para manter o estado entre páginas.
+A interface não exibe mais o aviso de “login fictício”.
+
+Foto de perfil:
+images/profile/mariana.jpg
+
+
+ACERVO — COMO FUNCIONA
+------------------------------------------------------------
+O antigo conteúdo de Poesias + Elogios foi reunido em acervo.html.
+O nome “Acervo” foi escolhido porque a página não contém apenas fotos: ela aceita poesias, elogios, prints, séries, desenhos, referências, vídeos, memórias e carrosséis.
+
+- Na primeira entrada, o feed recebe uma ordem aleatória e essa ordem passa a ser salva no navegador.
+- Sair, voltar ou recarregar mantém os posts exatamente na mesma posição.
+- O botão de shuffle agora é apenas um ícone escuro e compacto; ele gera outra ordem sem recarregar e salva a nova disposição.
+- Os primeiros itens do arranjo recebem um pequeno marcador “NOVO”.
+- Itens horizontais podem ocupar duas colunas.
+- Um post pode ter uma única imagem, GIF animado, vídeo ou várias mídias em carrossel.
+- Fotos, GIFs e vídeos aparecem limpos no feed; título/comentário ficam para a visualização expandida.
+- Poesias aparecem como posts de texto compactos: categoria, título, pequeno trecho e assinatura; a mídia ligada ao poema só aparece ao expandir.
+- O visualizador possui setas laterais para ir à publicação anterior/próxima sem fechar o modal.
+- Carrosséis continuam com controles próprios para navegar entre as mídias do mesmo post.
+- Se não houver comentário, a mídia usa praticamente toda a janela.
+- Poesias mantêm assinatura; elogios não usam assinatura. As assinaturas usam Press Start 2P com reflexo de luz animado.
+- Alguns arquivos podem exigir login ou contrato aceito.
+
+MARCO DE EXPLORAÇÃO — REGRA SURPRESA DE LOGIN:
+- A interface não mostra contador nem informa previamente a quantidade necessária.
+- Enquanto estiver deslogada, o Acervo registra silenciosamente os primeiros 10 itens diferentes abertos.
+- O décimo item ainda pode ser visto normalmente; ao encerrar essa visualização, o Acervo pede login para continuar.
+- Se a Mariana já estiver logada antes desse ponto, a etapa já é considerada cumprida.
+- Depois que o login desta etapa for cumprido uma vez, o Acervo entra em Modo Livre naquele navegador e não cria novas travas por quantidade.
+- Publicações configuradas como privadas continuam exigindo login normalmente, e publicações de contrato continuam exigindo contrato aceito.
+- A ordem do feed é preservada. Ela só muda quando o botão de shuffle for pressionado voluntariamente.
+
+Arquivos sugeridos e instruções adicionais:
+images/acervo/LEIA-ME.txt
+
+
+VOUCHERS — USO / RESGATE
+------------------------------------------------------------
+Os 6 ícones já estão anexados:
+- voucher-01.png -> Encontro à noite
+- voucher-02.png -> Eu paro tudo
+- voucher-03.png -> Café na cama
+- voucher-04.png -> Maratona de filmes
+- voucher-05.png -> Massagem sem reclamação
+- voucher-06.png -> Perdão automático
+
+Fluxo de uso:
+1. Primeiro clique no voucher ativo: vira para mostrar os detalhes.
+2. Segundo clique: revela o botão “Resgatar voucher”.
+3. “Resgatar voucher” abre uma confirmação com o fundo borrado.
+4. O aviso informa que, ao confirmar, o voucher será marcado como utilizado e não terá reembolso/estorno/segunda via.
+5. Depois da confirmação, o voucher recebe o estado RESGATADO e fica salvo no navegador.
+
+Estado salvo em localStorage:
+nosdois-voucher-redemptions
+
+
+PROGRESSO DO SITE
+------------------------------------------------------------
+O site guarda localmente:
+- login
+- tema claro/escuro
+- idioma
+- faixa/posição do player
+- plano escolhido
+- liberação e aceite do contrato
+- vouchers resgatados
+- rodada de exploração do Acervo
+
+O contrato só aparece no menu depois de ser liberado pela escolha de um plano e enquanto a titular estiver logada.
+No rodapé da página principal:
+- deslogada -> “Contrato” e “Memórias” ficam escondidos;
+- plano renovado/upgrade confirmado, antes da leitura -> aparece “Contrato”;
+- depois de abrir a carta -> passa a “Reler o contrato”;
+- depois de assinar -> aparece também “Memórias”.
+O contrato muda conforme a escolha:
+- Namoro -> Contrato de Renovação de Namoro
+- Casamento -> Contrato de Upgrade para Casamento
+- Casamento Plus -> Contrato de Casamento Plus
+
+
+HISTÓRICO RESUMIDO DAS REVISÕES
+============================================================
+
+v24 — Organização inicial
+- Projeto separado em index.html, css/, js/ e music/.
+- Configurações e conteúdo passaram para js/config.js.
+
+v25 — Tipografia
+- Padronização de pesos da fonte do corpo.
+- Press Start 2P mantida nos detalhes pixel/game.
+- Reflexo dos textos pixel desacelerado.
+
+v26 — Nova identidade tipográfica
+- Roboto Slab passou a ser a base do site.
+- Ajustes nas variáveis de fonte.
+
+v27 — Hero e timeline
+- Título principal mais compacto e forte.
+- Timeline reestruturada com 8 momentos, assinatura e textos maiores.
+
+v28 — Vouchers e telefone
+- Código de barras removido da frente e mantido apenas no verso.
+- Código textual em binário.
+- Modal do telefone ampliado no desktop.
+- Botão de aceitar contrato e título refinados.
+
+v29 — “Nosso Capítulo”
+- Título principal alterado para “Nosso Capítulo”.
+- Timeline ganhou suporte real a múltiplas fotos e crossfade por scroll.
+- Rodapé e títulos refinados.
+
+v30 — Envelope, publicidade e textura
+- Envelope redesenhado.
+- Frases finais viraram painéis publicitários/branded.
+- Fundo ganhou primeira camada de grão/ruído.
+
+v31 — Experimentos de envelope
+- Testes de abertura com duas abas inspirados em referências externas.
+- Alterações experimentais nos grupos do rodapé/menu.
+
+v32 — Correção do envelope
+- Envelope alinhado novamente e coração removido.
+
+v33 — Refinamentos experimentais
+- Novos testes de proporção e abertura do envelope antes da decisão final.
+
+v34 — Retorno ao envelope preferido
+- Recuperado o estilo próximo ao v30.
+- Envelope mantido sem coração.
+
+v35 — Organização de imagens
+- Favicon preparado.
+- Pastas timeline/, memories/ e vouchers/ formalizadas.
+- Convenção photo.01.jpg / photo.02.jpg / photo.03.jpg.
+
+v36 — Ícones dos vouchers
+- Configurados voucher-01.png até voucher-06.png.
+- Placeholder desaparece automaticamente quando existe PNG válido.
+
+v37 — Responsividade e música
+- Correção do eixo da timeline em telas menores.
+- 16 músicas incluídas no ZIP.
+- Contatos reais configurados.
+- “Promessas” virou “Mais +”.
+
+v38 — Primeiras páginas extras
+- Criadas Benefícios, Poesias e Elogios.
+- Estilo compartilhado das subpáginas.
+
+v39 — Acessibilidade visual
+- Tema claro/escuro com persistência.
+- Preferência inicial acompanha o sistema.
+- Player compartilhado entre páginas.
+
+v40 — Integração das subpáginas
+- Rodapé dark em vidro.
+- Dropdown “Nossa história” nas páginas extras.
+- Player corrigido.
+- Poesias ganharam modal ampliado.
+
+v41 — Benefícios virou Planos
+- Página renomeada para planos.html.
+- Detalhes dos planos simplificados e refinados.
+- Poesias ganharam layout expandido foto + texto.
+
+v42 — Idiomas e poemas
+- PT/EN/ES também nas páginas internas.
+- Menu mobile expandido.
+- “A Rainha do Meu Castelo” entrou como primeiro poema.
+
+v43 — Polimento
+- Animações mais contínuas.
+- Scrollbars visuais escondidas.
+- Vouchers/polaroids mais translúcidos no dark.
+- Modal dos planos centralizado.
+
+v44 — Novos textos
+- Grão do fundo reforçado.
+- Inclusão inicial dos textos “Um mês” e “Amor, meu bem, bom dia”.
+- Assinatura da Rainha alterada para “Do seu fiel parceiro, o Rei do seu castelo”.
+
+v45 — Correção da biblioteca de poemas
+- Cards e conteúdos expandidos separados corretamente.
+- “Casa” e “Azul” removidos.
+- Lista consolidada em 8 poemas.
+
+v46 — Escolhas românticas dos planos
+- Casamento ganhou a opção ousada “Ele vai casar comigo mesmo!!!”.
+- Casamento Plus ganhou “Quero o pacote completo 😳”.
+- Respostas especiais e animações começaram a ser testadas.
+
+v47 — Primeiro protótipo de login nos planos
+- Login passou a fazer parte da progressão dos planos.
+- Primeiros estados de confirmação e upgrade.
+
+v48 — Login no cabeçalho
+- Entrada de conta adicionada ao menu.
+- Foto/identidade da Mariana depois do login.
+- Sessão passou a ser compartilhada entre páginas.
+
+v49 — Progressão do contrato
+- Escolha do plano começou a liberar o envelope/contrato.
+- Conteúdos especiais ganharam bloqueio por login/contrato.
+- Home passou a convidar para renovar antes do envelope.
+
+v50 — Fluxo de planos refinado
+- Plano expande primeiro; login só é pedido ao tentar continuar.
+- Contrato some do menu enquanto bloqueado.
+- Rodapé passou a esconder links para etapas ainda não vistas.
+
+v51 — Ordem do cabeçalho
+- Primeira reorganização dos controles da hotbar principal.
+
+v52 — Correções de alinhamento
+- Ordem real do menu corrigida via CSS/HTML.
+- Grid de Planos centralizado em relação à comparação científica.
+
+v53 — Login e detalhes dos planos
+- Expansão dos planos voltou a ocorrer antes da autenticação.
+- Login do cabeçalho virou modal central com fundo borrado.
+- Conteúdos protegidos ficaram mais limpos.
+
+v54 — Contratos dinâmicos
+- Status do Namoro corrigido para visitante/logada/contrato pendente/ativo.
+- Contrato passa a mudar conforme Namoro, Casamento ou Casamento Plus.
+- Casamento e Plus levam diretamente para assinatura quando escolhidos.
+- Login protegido e tipografia do PT refinados.
+- Rainha passou a exigir login; assinaturas dos arquivos 02 e 05 ajustadas.
+
+v55 — Assets reais
+- Os 6 ícones enviados foram anexados aos vouchers.
+- Foto da Mariana foi recortada para focar no rosto e configurada no perfil.
+
+v56 — Acervo + vouchers utilizáveis
+- Poesias e Elogios foram reunidos no novo Acervo.
+- Feed embaralhado a cada entrada e botão de shuffle manual.
+- Suporte a fotos, prints, vídeo, posts sem legenda, cards largos e carrosséis.
+- Modal estilo feed com mídia + texto quando houver comentário.
+- Marco das 10 descobertas: a primeira sequência de 10 itens pausa o Acervo uma única vez e convida a visitar outro capítulo.
+- Vouchers agora podem ser resgatados e ficam marcados como utilizados.
+- Confirmação de voucher usa fundo borrado e aviso de não reembolso.
+- Aviso visual de “login fictício” removido do formulário.
+- Mensagens de conteúdo protegido seguem o mesmo padrão visual do aviso dos planos.
+- README refeito como histórico completo do projeto.
+
+
+v57 — Acervo em modo livre
+- A pausa das 10 descobertas agora acontece apenas uma vez.
+- Depois de visitar outro capítulo e retornar, o Acervo entra em Modo Livre permanentemente naquele navegador.
+- Não existem novas pausas a cada grupo de 10.
+- A ordem do feed é preservada entre saídas, retornos e recarregamentos.
+- O feed só muda de ordem quando a visitante aperta “Misturar de novo”.
+- O contador muda para “Modo livre” após a brincadeira inicial das 10 descobertas.
+
+
+v58 — Acervo mais próximo de um feed real
+- Bordas/arredondamentos do Acervo reduzidos e visual mais slim.
+- O contador das 10 descobertas foi removido da interface; a regra virou uma surpresa que pede login após a primeira sequência de 10 itens, apenas para quem ainda estiver deslogada.
+- Depois de cumprir essa etapa, não há novas travas por quantidade; posts privados continuam com suas próprias regras.
+- Poesias no feed passaram a mostrar somente categoria, título, pequeno trecho e assinatura, sem entregar o poema inteiro nem a foto.
+- Fotos, GIFs e vídeos ficam limpos no grid; comentários aparecem ao expandir.
+- Setas laterais permitem navegar entre publicações abertas sem voltar ao feed.
+- Shuffle virou botão apenas com ícone, escuro, compacto e em vidro.
+- Assinaturas do Acervo adotaram Press Start 2P e o reflexo de luz foi corrigido no site principal e nas subpáginas.
+- Links de Planos ganharam feedback escuro ao pressionar.
+- Rodapé da home ganhou estados: Contrato só após liberação/logada, “Reler” após leitura e “Memórias” após assinatura.
+
+COMO TESTAR
+------------------------------------------------------------
+Para navegação, áudio, persistência e várias páginas, prefira abrir a pasta completa com Live Server (VS Code) ou outro servidor local.
+
+Ao testar estados novamente, lembre que localStorage guarda as escolhas anteriores.
+Para começar do zero, limpe os dados do site no navegador ou execute no console:
+
+localStorage.clear();
+location.reload();
+
+
+============================================================
+V59 — ACERVO: LAYOUT RESPONSIVO ESTILO INSTAGRAM
+============================================================
+- Aumentado o espaço vertical entre o hero “Acervo” e o início do feed.
+- Botão de shuffle movido para a lateral direita, logo acima do feed.
+- Shuffle ficou um pouco mais escuro no tema claro, mantendo transparência/vidro.
+- Em telas pequenas, o Acervo agora mantém 3 colunas, inspirado na grade do Instagram.
+- Posts horizontais podem continuar ocupando 2 colunas na grade mobile.
+- Cards de foto/vídeo/GIF viram miniaturas mais limpas no celular.
+- Cards de poesia/elogio ficam compactos no mobile: categoria, título e pequeno trecho; o conteúdo completo continua ao abrir.
+- Espaçamento da grade mobile foi reduzido para preservar a sensação de feed/galeria.
+
+
+============================================================
+V60 — PLANOS: MAIS RESPIRO VERTICAL
+============================================================
+- Aumentado o espaço entre o hero/título da página de Planos e os cards dos planos.
+- Aumentado o espaço entre o final dos cards dos planos e a seção “Comparação técnica altamente científica”.
+- Responsividade ajustada para manter esse respiro em tablets e celulares sem desperdiçar área útil da tela.
+
+
+============================================================
+V61 — CABEÇALHO UNIFICADO
+============================================================
+- Cabeçalhos de Planos e Acervo alinhados visualmente ao cabeçalho da página principal.
+- "Nossa história" e "Mais +" ganharam o mesmo espaçamento, peso e comportamento da home.
+- A navegação central agora possui respiro real antes do player/idioma/tema/login.
+- Dropdown "Nossa história" usa o mesmo tamanho, vidro, posição centralizada e espaçamento da página principal.
+- Ao clicar no dropdown das subpáginas, ele permanece aberto até clicar fora, clicar novamente ou pressionar Esc.
+- Hover continua disponível no desktop sem fechar um menu que foi fixado por clique.
+- Ajustes responsivos preservam o menu hambúrguer já existente em telas menores.
+
+
+============================================================
+V62 — VOUCHERS, CONTRATO E ACERVO CONTÍNUO
+============================================================
+- Ícones reais dos vouchers não recebem mais a placa azul de fundo no modo escuro.
+- Setas do carrossel de vouchers ganharam mais contraste no dark.
+- Fluxo de voucher simplificado: 1º clique vira para os detalhes e já revela “Resgatar voucher” abaixo do ticket; ao voltar para a frente ou trocar de voucher, o botão some.
+- Ticket ativo sobe levemente e as setas descem quando a ação de resgate aparece.
+- Modal de voucher não exibe mais a faixa vazia após o resgate e o botão “OK ♥” fica centralizado.
+- Botões “Ir para o contrato” e “Sim, eu aceito/renovo” ganharam contraste correto no modo escuro.
+- Todos os contratos agora incluem uma condição explícita, em tom de brincadeira, de que não há reembolso, troca, estorno ou devolução após a assinatura.
+- Dropdown “Nossa história” da home recebeu vidro mais transparente e hover que abre ao entrar e fecha ao sair; Linha do tempo aparece como item atual na página principal.
+- Acervo ganhou assinatura visual em duas linhas: “Acervo” + “M❤R”.
+- Texto de apresentação do Acervo ficou mais emocional e pessoal.
+- Setas de navegação do visualizador do Acervo foram centralizadas verticalmente também no mobile.
+- Feed do Acervo agora é contínuo/infinito: ao chegar ao fim do conjunto atual, uma nova sequência dos mesmos arquivos é embaralhada e anexada automaticamente, evitando um ciclo visual idêntico.
+- A regra surpresa de login após as primeiras descobertas e os bloqueios privados/por contrato continuam valendo mesmo no feed infinito.
+
+
+V63 — ESTADO DEFINITIVO + VOUCHERS
+- Corrigida a navegação dos vouchers para não travar após um resgate.
+- No celular, vouchers podem ser trocados tanto pelas setas quanto deslizando para os lados.
+- O estado RESGATADO perdeu o ✓ e virou um selo/pílula azul mais limpo.
+- Ao trocar de voucher, qualquer verso aberto é fechado e os controles voltam ao estado normal.
+- Escolher/renovar um plano agora trava a escolha: após confirmar, não é possível contratar outro plano naquele progresso.
+- Depois da assinatura, o contrato passa a ser somente leitura; pode ser revisto como memória, mas não assinado novamente.
+- O plano escolhido continua levando ao contrato assinado; os demais ficam com a escolha encerrada.
+- Reescrito o convite antes dos Planos para não entregar a surpresa do envelope/carta.
+
+
+V64 — ACERVO: ACESSIBILIDADE E BLOQUEIO MAIS LIMPO
+- Aumentada a tipografia dos cards do Acervo no desktop e principalmente no celular.
+- A grade de 3 colunas no mobile foi mantida, mas o resumo foi reduzido para uma linha para permitir letras maiores.
+- Títulos, categorias, assinaturas e pequenos indicadores ganharam tamanhos mais legíveis.
+- Bordas dos cards ficaram ainda mais discretas e com cantos mínimos.
+- Publicações bloqueadas agora exibem somente um ícone de cadeado, sem a palavra “PROTEGIDO” ocupando o card.
+- O cadeado possui rótulo acessível para leitores de tela e tooltip no desktop.
+
+
+============================================================
+V65 — ACERVO, BUSCA, RESET SECRETO E UPGRADES PROGRESSIVOS
+============================================================
+- O título principal do Acervo agora aparece em caixa alta: ACERVO.
+- Corrigida a abertura de publicações no desktop: o clique agora usa delegação no grid, evitando cards que deixavam de responder ao mouse após embaralhamento/feed infinito.
+- Elogios deixaram de exibir o rótulo “ELOGIO” no feed e no visualizador; a visitante descobre o conteúdo ao abrir.
+- Ao expandir um elogio, aparece um contador afetivo de uso/registro. Os valores partem de números genéricos e aumentam com o passar dos dias e também conforme o item é aberto.
+- Adicionado o registro “Eu te amo”; ele possui propositalmente o maior contador do Acervo.
+- Criada uma busca slim no topo do feed. O botão de lupa expande o campo; a busca procura títulos, textos, assinaturas e categorias sem destruir a ordem principal do feed.
+- Durante uma pesquisa, o feed infinito pausa e mostra somente resultados únicos. Ao limpar a busca, o feed contínuo volta normalmente.
+- O fluxo de Planos agora permite upgrades progressivos sem downgrade:
+  • Namoro → pode subir para Casamento ou Casamento Plus.
+  • Casamento → pode subir para Casamento Plus.
+  • Casamento Plus → é o nível máximo; planos inferiores ficam apenas como planos anteriores.
+- Se houver um contrato novo aguardando assinatura, é necessário concluí-lo antes de iniciar outro upgrade.
+- Cada nova assinatura fica registrada no histórico interno de contratos. Assim, um contrato já assinado continua fazendo parte da história mesmo quando um upgrade posterior é iniciado.
+- Conteúdos do Acervo já liberados por um contrato anterior continuam disponíveis durante um upgrade futuro.
+- Criado um comando secreto para reiniciar a experiência inteira sem mexer em tema, idioma ou estado do player.
+
+COMANDO SECRETO DE RESET
+------------------------------------------------------------
+Em qualquer página do site, fora de campos de texto, digite:
+
+REINICIARNOSDOIS
+
+e depois pressione ENTER.
+
+O site apaga apenas o progresso da experiência:
+- login;
+- plano escolhido;
+- contratos/assinaturas;
+- vouchers resgatados;
+- progresso/ordem do Acervo;
+- contadores locais de abertura do Acervo.
+
+Tema, idioma e estado da playlist são preservados.
+Após o comando aparece uma pequena tela “Voltando ao começo… ♥” e o site retorna para a home.
+
+
+============================================================
+V66 — ACERVO: BUSCA 1:1 + CLIQUE DESKTOP / VOUCHERS
+============================================================
+- Campo de pesquisa do Acervo recebeu uma borda única e contínua, com lupa e campo visualmente integrados.
+- Área da lupa ficou maior e perfeitamente quadrada no desktop, preservando versão compacta no celular.
+- Durante uma busca no desktop, os resultados passam a usar tiles 1:1 para manter a sensação de grade de perfil.
+- Tipografia dos cards do Acervo foi levemente reduzida no desktop; o mobile mantém a prioridade de acessibilidade da V64.
+- Abertura dos posts do Acervo passou a usar listeners diretos em cada card, corrigindo cliques que podiam falhar após busca, shuffle ou feed infinito.
+- Corrigido o clique dos vouchers no computador: o gesto de swipe não captura mais o ponteiro do mouse.
+- Swipe continua funcionando em toque/caneta, enquanto o desktop volta a usar clique normal.
+- Restaurado um feedback de hover nos vouchers ativos e laterais para indicar interatividade no computador.
+
+
+V67 — CORREÇÃO DE HOVER DOS VOUCHERS + GUIA DO ACERVO
+- Corrigido artefato 3D no desktop em que o verso do voucher podia aparecer invertido/espelhado ao manter o mouse sobre o ticket ou botão.
+- Hover continua elevando o voucher, mas sem aplicar filtros que quebram preserve-3d.
+- Navegação mobile mantém toque nas setas + swipe horizontal; tocar no ticket continua abrindo/fechando os detalhes.
+- images/acervo/LEIA-ME.txt ganhou exemplos completos de foto, GIF, vídeo, carrossel, bloqueios e observações de limite/performance.
+
+
+============================================================
+V68 — CRÉDITOS, PERFIL DA MARIANA E PRIMEIROS EASTER EGGS
+============================================================
+- Créditos adicionados discretamente no rodapé da página principal, ao lado do status do contrato.
+- Ao clicar em Créditos, o fundo é borrado e surge uma carta/texto sem caixa sólida, no mesmo espírito do modal Me Liga.
+- Créditos destacam Mariana como protagonista, Raphael como criador/autor e ChatGPT como assistência criativa/técnica.
+- O popover da conta agora permite clicar na foto/nome da Mariana para abrir um perfil completo.
+- Perfil inspirado em interfaces sociais: banner, avatar, nome, arroba, bio e grade 3x3 de memórias.
+- A idade ficou preparada no campo PROFILE.age em js/extras.js, porém vazia para não inventar informação.
+- Fotos do perfil: images/profile/gallery/profile-01.jpg até profile-09.jpg.
+- Botão “Ver perfil completo” executa um carregamento fictício e revela a mensagem de que ainda existem fotos e capítulos que não foram criados.
+- Easter egg 1: 5 cliques rápidos no logo “nós dois” = chuva grande de corações.
+- Easter egg 2: 3 cliques rápidos em M❤R no Acervo tenta tocar music/nossa-musica.mp3.
+- Se nossa-musica.mp3 ainda não existir, o site mostra apenas uma mensagem discreta, sem quebrar o player.
+
+
+============================================================
+V69 — PERFIL MAIS COMPLETO, EDITÁVEL E COM BANNER PREPARADO
+============================================================
+- Nome e @ da Mariana foram aproximados da foto de perfil para deixar a leitura mais natural.
+- O perfil ganhou estatísticas no topo: posts, seguidores e seguindo, com valores genéricos editáveis em js/extras.js.
+- A bio agora começa visualmente com um anel (💍) e o texto vem logo abaixo/ao lado.
+- Criado o botão “Editar perfil”. Ele permite alterar a bio e escolher uma nova foto de perfil diretamente pelo navegador.
+- A nova foto escolhida é recortada automaticamente em formato quadrado, reduzida para 512x512 e salva localmente no navegador para não pesar tanto.
+- Foto e bio editadas são persistidas em localStorage e a foto também passa a aparecer no ícone da conta do cabeçalho.
+- O comando secreto REINICIARNOSDOIS também limpa essas alterações de perfil e retorna para a foto/bio padrão.
+- Perfil recebeu cantos menores, bordas mais discretas e blur mais forte tanto no claro quanto no dark.
+- Criado o caminho images/profile/banner.gif. Basta colocar um GIF com esse nome para substituir o fundo do banner; enquanto o arquivo não existir, aparece o gradiente padrão.
+- A antiga linha “9 memórias” foi substituída por uma barra visual inspirada no Instagram, com ícones de Fotos, Reels, Reposts e Mencionados. Eles são apenas decorativos nesta versão e possuem animação de hover.
+- A grade 3x3 continua logo abaixo da barra visual.
+
+
+V71 — ACERVO MAIS FÁCIL DE PREENCHER
+- Criado js/acervo-conteudo.js como arquivo simples para adicionar novas publicações.
+- O arquivo possui somente um modelo de cada tipo, com campos separados por linhas e comentários explicativos.
+- Para ativar um post, basta trocar enabled: false por enabled: true.
+- Para repetir um tipo, copie o bloco inteiro, troque o id e os caminhos das mídias.
+- O js/acervo.js continua responsável apenas pela lógica do feed e não precisa mais ser editado para adicionar novos conteúdos em português.
+
+
+V72 — ACERVO: GRID VERTICAL INTELIGENTE
+- Mídias em retrato são detectadas automaticamente pela proporção.
+- Imagens como 900x1600 deixam de ocupar duas colunas e passam a ocupar uma coluna por duas linhas (ex.: posições 1 + 4 numa grade 3x).
+- Mídias horizontais continuam usando duas colunas quando apropriado.
+- O comportamento também foi adaptado para a grade 3x do celular.
+- Durante pesquisa, os resultados continuam 1:1 para manter a leitura visual consistente.
+
+============================================================
+V73 — PAINEL DO ACERVO + CONTEÚDO UNIFICADO + ENQUADRAMENTO
+============================================================
+- O conteúdo antigo do Acervo e os posts que estavam em js/acervo-conteudo.js foram reunidos em uma única fonte: window.ACERVO_CONTENT.
+- IDs duplicados foram consolidados. O conteúdo criado manualmente pelo usuário tem prioridade quando já existia um post com o mesmo ID.
+- Quatro placeholders antigos de mídia foram preservados como rascunhos para não aparecerem quebrados/duplicados no feed: chat-01, reference-01, carousel-01 e video-01.
+- Criado admin-acervo.html, um painel local para cadastrar e administrar fotos, carrosséis, vídeos, GIFs, conversas, referências, poesias e textos curtos.
+- Acesso secreto: no campo de pesquisa do Acervo, digite EDITARACERVO e pressione Enter.
+- O painel permite publicar, salvar como rascunho, editar, duplicar e excluir posts.
+- Filtros do painel: busca, tipo de conteúdo, privacidade e status publicado/rascunho.
+- Ao conectar a pasta raiz do projeto no Chrome/Edge, o painel grava js/acervo-conteudo.js e copia novas mídias automaticamente para images/acervo/.
+- O painel tenta lembrar a pasta selecionada usando IndexedDB; o navegador ainda pode pedir permissão novamente por segurança.
+- Criada a seção “Mídias soltas”, que detecta arquivos existentes em images/acervo/ que ainda não pertencem a nenhum post e permite começar um post com um clique.
+- Criado editor de enquadramento do feed: Automático, 1:1, 4:5, 9:16, 16:9 e Original.
+- O editor também permite foco horizontal/vertical, zoom e rotação em 90 graus.
+- O enquadramento é não destrutivo: o feed usa a composição escolhida, mas o modal continua abrindo a mídia original inteira.
+- Um post explicitamente configurado como 1:1 não é mais convertido para tile vertical apenas porque a foto original é 900x1600.
+- O comportamento automático da v72 continua disponível quando a proporção está em “Automático”.
+- O painel também exporta backup JSON e acervo-conteudo.js como segurança/fallback.
+
+============================================================
+V74 — TEXTOS COM FOTO BORRADA + TRECHOS DE MÚSICA
+============================================================
+- Poesias, textos curtos e trechos de música podem receber foto, GIF ou vídeo sem virar um post de mídia comum.
+- Quando um desses textos possui mídia, o feed usa a primeira mídia como fundo bem borrado, com uma camada de vidro por cima e o título/trecho em destaque.
+- Ao abrir o post, a mídia original continua aparecendo normalmente no visualizador, sem perder o arquivo ou o enquadramento original.
+- O enquadramento escolhido no Editor do Acervo também controla o foco do fundo borrado.
+- Criado o tipo “Trecho de música” no Editor do Acervo e nos filtros.
+- Trechos de música não exibem o rótulo “MÚSICA” no feed nem no visualizador: ficam apenas título, letra/trecho e assinatura opcional.
+- Posts de texto sem mídia continuam com o visual limpo já existente.
+
+
+============================================================
+V75 — TEXTOS COM FUNDO, MÚSICAS E TÍTULO OPCIONAL
+============================================================
+- Assinaturas de poesias/textos/letras não aparecem mais no feed; ficam visíveis somente ao abrir a publicação.
+- Posts de texto com mídia usam a foto/vídeo apenas como fundo borrado; título, categoria e trecho permanecem nítidos.
+- Trechos de música voltam a exibir um marcador próprio: “TRECHO DE MÚSICA” (com equivalentes EN/ES).
+- O painel do Acervo ganhou “Exibir título no Acervo”. Desmarque para manter o título salvo internamente, mas ocultá-lo no feed e no modal.
+- Poesias/textos sem mídia continuam como cards textuais limpos, sem fundo inventado.
+
+
+============================================================
+V76 — CURADORIA DA TIMELINE + ACERVO ORGANIZADO + RESET NO ADMIN
+============================================================
+- A timeline foi preenchida provisoriamente com imagens que já existiam no projeto; os antigos caminhos photo.01/photo.02/photo.03 que estavam ausentes foram removidos.
+- Criado images/timeline/CURADORIA-TIMELINE.txt com sugestões específicas de substituição para cada um dos 8 capítulos.
+- Os pequenos detalhes agora usam um mini-carrossel com desenho/rotina, pipoca e cinema.
+- As mídias soltas do Acervo foram organizadas em novos carrosséis: Algumas favoritas, Pequenos donos da câmera, Pelo caminho e Eu também apareço por aqui.
+- photo-32.jpeg foi incorporada ao carrossel existente Noite de filme.
+- O painel do Acervo ganhou uma ferramenta protegida por senha para reiniciar o progresso da experiência sem apagar o conteúdo do Acervo.
+- Senha do reset: a mesma senha da conta da Mariana.
+
+============================================================
+V78 — AUTOPLAY DAS FOTOS DA TIMELINE (BASE DO USUÁRIO)
+============================================================
+- Esta versão foi criada diretamente a partir do ZIP enviado pelo usuário, preservando as fotos e demais alterações já feitas nele.
+- Marcos da timeline com 2 ou mais fotos agora alternam automaticamente a imagem a cada 5 segundos.
+- A troca usa o crossfade já existente e não depende mais da posição do scroll.
+- O autoplay só roda enquanto o respectivo capítulo está visível; ao sair da tela ele pausa para não gastar recursos.
+- Ao voltar para o capítulo, a sequência continua da foto em que estava.
+- O intervalo pode ser alterado em js/app.js pela constante TIMELINE_PHOTO_INTERVAL (5000 = 5 segundos).
+
+
+============================================================
+V79 — MOBILE, PLAYLIST CENTRAL E ACESSIBILIDADE
+============================================================
+- No Acervo, textos protegidos não ficam mais borrados no feed: o cadeado continua controlando a abertura, enquanto apenas a mídia/fundo pode permanecer desfocada.
+- No celular, cards de poesia, texto curto e trecho de música passam a ocupar 2 colunas da grade, melhorando bastante a legibilidade sem abandonar a grade 3x das fotos.
+- Playlist da Home e das subpáginas vira um painel central no celular/touch, com fundo borrado, área rolável e botão de fechar.
+- Adicionados aria-expanded/aria-controls, fechamento por ESC, retorno de foco e estados focus-visible mais claros.
+- Botões de navegação e fechamento receberam alvos mínimos de toque e suporte a prefers-reduced-motion.
+
+============================================================
+V80 — FEED 3x ESTÁVEL + ADMIN REFINADO + PERFORMANCE MOBILE
+============================================================
+- O feed do Acervo voltou a usar três colunas reais no desktop e no celular. Cards comuns, poesias, textos e trechos de música ocupam uma célula 1:1.
+- Mídias realmente horizontais podem ocupar 2 colunas x 1 linha; mídias realmente verticais podem ocupar 1 coluna x 2 linhas. O layout reserva as linhas grandes para impedir que dois cards grandes disputem a mesma linha.
+- Carrosséis não são mais considerados largos só por terem várias imagens: o primeiro arquivo e a proporção escolhida definem o formato do card.
+- Posts protegidos não borram mais título, categoria ou prévia textual. O cadeado continua bloqueando a abertura quando necessário.
+- Referências de fotos inexistentes nas poesias foram removidas; poemas sem foto voltam a ser cards de texto limpos em vez de receber uma camada clara vazia.
+- Trechos antigos cadastrados com categoria “Música” também são reconhecidos como “TRECHO DE MÚSICA”, sem exigir recadastro.
+- Textos com foto de apoio usam menos blur e menos camada branca no modo claro; o texto não recebe blur nem glow e o fundo ganhou uma granulação mais perceptível. O dark recebeu o equivalente com contraste próprio.
+- O Painel do Acervo foi simplificado: saiu o hero grande e ficou apenas a identidade discreta “PAINEL SECRETO” e o estado da pasta conectada.
+- A seleção de proporção virou um menu próprio, com contraste controlado em claro/escuro e navegação por teclado, substituindo o select nativo que podia ficar ilegível.
+- Os controles de visibilidade agora são independentes: título no Feed, título no Post, texto no Feed e texto no Post. Isso permite esconder só a prévia ou esconder o conteúdo também quando expandido.
+- A restauração da experiência agora abre um modal central com fundo borrado, senha, cancelar e confirmação explícita. O conteúdo do Acervo não é apagado.
+- Otimizações para celular: vídeos do feed pausam fora da viewport, imagens usam carregamento tardio, filtros por card foram reduzidos e animações/ruído pesados são simplificados em telas touch/coarse. O objetivo é aproximar a experiência de uma animação fluida em aparelhos capazes, sem prometer um FPS fixo independente do hardware.
+
+
+============================================================
+V81 — FEED MAIS VARIADO, ADMIN POLIDO E AJUSTES MOBILE
+============================================================
+- O feed infinito passou a usar embaralhamento inteligente: evita repetir o mesmo post/mídia perto do fim de um lote e espaça cards grandes.
+- Cards horizontais/verticais recebem uma linha de respiro entre outros cards grandes; os quadrados preenchem o espaço.
+- “Trecho de música” foi simplificado para “TRECHO” no Acervo e no painel.
+- Cabeçalho do painel secreto foi redesenhado no mesmo espírito de vidro das outras páginas, sem M❤R.
+- O reset de progresso agora fica em um botão de ícone no cabeçalho e continua abrindo o modal com senha.
+- Removido o aviso técnico sobre js/acervo-conteudo.js/images/acervo da interface do painel.
+- Player mobile passou a considerar largura <= 900px além de pointer/hover, melhorando a detecção em aparelhos como Galaxy S23.
+- Dropdown da playlist no desktop ganhou mais distância do cabeçalho.
+- Legendas das três memórias finais atualizadas.
+- Créditos agora usam uma mensagem longa e justificada; detalhes azuis recebem brilho animado.
+- Travessões em textos de contrato/mensagens foram suavizados para vírgulas quando usados como pausa.
+
+============================================================
+V82 — AJUSTES PARA TELAS MOBILE ESTREITAS
+============================================================
+- Player modal passou a usar as bordas reais do viewport (safe-area), evitando deslocamento em Galaxy S8/S23, iPhone e emulação 320–430 px.
+- Reforçada a proteção contra overflow horizontal em telas pequenas.
+- Hotbar principal compacta progressivamente abaixo de 430 px e 350 px, sem empurrar controles para fora da tela.
+- Envelope passou a calcular a largura pela viewport abaixo de 430 px, preservando margens laterais inclusive em aparelhos de 320 px.
+- Loading usa 100dvh/safe-area e recebe pequenos ajustes de escala em telas estreitas.
+- A experiência desktop não foi alterada nesta revisão.
+
+
+============================================================
+V83 — VIEWER INTELIGENTE DO ACERVO
+============================================================
+- Foto, vídeo ou carrossel sem título/texto visível abre somente a mídia, sem painel lateral vazio.
+- A categoria (FOTO/CARROSSEL/etc.) sozinha não força mais a abertura da coluna de detalhes.
+- Poesias, trechos e textos sem mídia abrem em um modal somente de texto, sem área de imagem vazia.
+- O Admin ganhou o controle “Detalhes ao abrir”. Desligado, posts com mídia abrem só a mídia; sem mídia, o conteúdo textual continua ocupando o modal inteiro.
+- O novo campo showDetailsPost é salvo junto de cada publicação no acervo-conteudo.js.
+
+============================================================
+V84 — LEITURA LONGA NO ACERVO
+============================================================
+- Posts de texto/poesias sem mídia agora usam rolagem interna quando o conteúdo ultrapassa a altura disponível.
+- A fonte não é reduzida para fazer o texto caber.
+- Foi adicionada margem inferior real no fim da leitura para o último parágrafo/assinatura não ficar colado nem cortado.
+- O mesmo comportamento foi ajustado para desktop e mobile.
+
+
+============================================================
+V85 — THUMBNAILS, CARREGAMENTO PROGRESSIVO E PRIVACIDADE LEVE
+============================================================
+- O feed do Acervo usa thumbnails WebP de até 800 px; a mídia original continua intacta e é aberta no viewer.
+- O Admin gera automaticamente a thumbnail quando novas imagens são publicadas.
+- O feed carrega em lotes de 18 posts, em vez de montar todo o Acervo de uma vez.
+- Thumbnails usam lazy loading/decoding assíncrono e fallback automático para a imagem original se necessário.
+- Adicionados robots.txt e meta noindex/nofollow/noimageindex para reduzir indexação pública.
+- Consulte PRIVACIDADE.txt: GitHub Pages público não oferece proteção real dos arquivos por URL.

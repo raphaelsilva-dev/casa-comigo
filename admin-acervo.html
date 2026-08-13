@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex,nofollow,noarchive,noimageindex,nosnippet"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#d8e8ff">
+  <script src="js/theme.js"></script>
+  <link rel="icon" href="images/favicon/favicon.png" type="image/png">
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/admin-acervo.css">
+  <title>Editor do Acervo</title>
+</head>
+<body>
+  <header class="admin-topbar">
+    <a class="admin-back" href="acervo.html" aria-label="Voltar ao Acervo"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg><span>Acervo</span></a>
+    <div class="admin-brand"><strong>PAINEL SECRETO</strong></div>
+    <div class="admin-top-actions">
+      <button class="admin-icon-button admin-reset-icon" type="button" id="open-progress-reset" aria-label="Reiniciar experiência" title="Reiniciar experiência"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4v6h6"/><path d="M5.5 15a7 7 0 1 0 .7-7.6L4 10"/></svg></button>
+      <button class="admin-theme admin-icon-button" type="button" data-theme-toggle aria-label="Alternar tema" title="Alternar tema">◐</button>
+    </div>
+  </header>
+
+  <main class="admin-shell">
+    <section class="admin-hero">
+      <div class="admin-project-card">
+        <span class="admin-status-dot" data-project-dot></span>
+        <div><strong data-project-status>Pasta do projeto não conectada</strong><small data-project-hint>Conecte a pasta raiz para copiar mídias e salvar o Acervo.</small></div>
+        <button type="button" class="admin-primary" id="connect-project">Selecionar pasta do projeto</button>
+      </div>
+    </section>
+
+    <section class="admin-layout">
+      <article class="admin-panel admin-editor" id="editor-panel">
+        <div class="admin-panel-head">
+          <div><span class="admin-kicker" data-editor-kicker>NOVO POST</span><h2 data-editor-title>Adicionar ao Acervo</h2></div>
+          <button class="admin-ghost" type="button" id="reset-editor">Limpar</button>
+        </div>
+
+        <div class="admin-type-grid" id="post-type-grid" aria-label="Tipo de conteúdo">
+          <button type="button" data-kind="photo" class="is-active">Foto</button>
+          <button type="button" data-kind="carousel">Carrossel</button>
+          <button type="button" data-kind="video">Vídeo</button>
+          <button type="button" data-kind="gif">GIF</button>
+          <button type="button" data-kind="conversation">Conversa</button>
+          <button type="button" data-kind="reference">Referência</button>
+          <button type="button" data-kind="poem">Poesia</button>
+          <button type="button" data-kind="lyric">Trecho</button>
+          <button type="button" data-kind="compliment">Texto curto</button>
+        </div>
+
+        <div class="admin-dropzone" id="media-dropzone" tabindex="0">
+          <input id="media-input" type="file" accept="image/*,video/mp4,video/webm,video/quicktime" multiple hidden>
+          <span class="admin-drop-icon">＋</span>
+          <strong>Arraste arquivos aqui</strong>
+          <small>ou clique para escolher fotos, GIFs e vídeos</small>
+        </div>
+
+        <div class="admin-media-list" id="media-list" aria-live="polite"></div>
+
+        <div class="admin-crop-section" id="crop-section" hidden>
+          <div class="admin-section-title"><div><span class="admin-kicker">ENQUADRAMENTO DO FEED</span><h3>Escolha o que aparece na miniatura</h3></div><small>A imagem original continua inteira quando o post é aberto.</small></div>
+          <div class="admin-crop-layout">
+            <div class="admin-crop-preview" id="crop-preview"><div class="admin-crop-frame" data-ratio="1:1"><img alt="Prévia do enquadramento" data-crop-image></div></div>
+            <div class="admin-crop-controls">
+              <div class="admin-ratio-field">
+                <span>Proporção</span>
+                <input id="crop-ratio" type="hidden" value="auto">
+                <div class="admin-ratio-picker" id="crop-ratio-picker">
+                  <button class="admin-ratio-trigger" id="crop-ratio-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                    <span data-ratio-label>Automático</span><svg aria-hidden="true" viewBox="0 0 20 20"><path d="m6 8 4 4 4-4"/></svg>
+                  </button>
+                  <div class="admin-ratio-menu" id="crop-ratio-menu" role="listbox" aria-label="Proporção da mídia">
+                    <button type="button" role="option" data-ratio-value="auto" aria-selected="true"><strong>Automático</strong><small>O formato da mídia decide</small></button>
+                    <button type="button" role="option" data-ratio-value="1:1"><strong>1:1</strong><small>Quadrado · Instagram</small></button>
+                    <button type="button" role="option" data-ratio-value="4:5"><strong>4:5</strong><small>Retrato</small></button>
+                    <button type="button" role="option" data-ratio-value="9:16"><strong>9:16</strong><small>Vertical</small></button>
+                    <button type="button" role="option" data-ratio-value="16:9"><strong>16:9</strong><small>Horizontal</small></button>
+                    <button type="button" role="option" data-ratio-value="original"><strong>Original</strong><small>Respeita a proporção do arquivo</small></button>
+                  </div>
+                </div>
+              </div>
+              <label>Foco horizontal <output id="crop-x-output">50%</output><input id="crop-x" type="range" min="0" max="100" value="50"></label>
+              <label>Foco vertical <output id="crop-y-output">50%</output><input id="crop-y" type="range" min="0" max="100" value="50"></label>
+              <label>Zoom <output id="crop-zoom-output">1.00×</output><input id="crop-zoom" type="range" min="1" max="2.5" step="0.05" value="1"></label>
+              <div class="admin-rotate-row"><span>Direção</span><button type="button" id="rotate-left" title="Girar para esquerda">↶</button><button type="button" id="rotate-right" title="Girar para direita">↷</button><button type="button" id="crop-reset">Resetar</button></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-fields">
+          <label class="admin-field admin-field-full">Título<input id="post-title" type="text" maxlength="140" placeholder="Ex.: Um dia que eu guardaria de novo"></label>
+          <label class="admin-field admin-field-full">Comentário / texto<textarea id="post-text" rows="7" maxlength="12000" placeholder="Escreva normalmente. Pode pular linhas à vontade."></textarea></label>
+          <div class="admin-visibility admin-field-full" aria-labelledby="visibility-title">
+            <div class="admin-visibility-head"><span class="admin-kicker">VISIBILIDADE</span><strong id="visibility-title">Escolha o que ela vê</strong><small>Feed = antes de abrir · Post = publicação expandida</small></div>
+            <div class="admin-visibility-grid">
+              <div class="admin-visibility-row"><span>Título</span><label class="admin-switch"><input id="post-title-feed" type="checkbox" checked><span class="admin-switch-ui"></span><em>Feed</em></label><label class="admin-switch"><input id="post-title-post" type="checkbox" checked><span class="admin-switch-ui"></span><em>Post</em></label></div>
+              <div class="admin-visibility-row"><span>Texto</span><label class="admin-switch"><input id="post-text-feed" type="checkbox" checked><span class="admin-switch-ui"></span><em>Feed</em></label><label class="admin-switch"><input id="post-text-post" type="checkbox" checked><span class="admin-switch-ui"></span><em>Post</em></label></div>
+              <div class="admin-visibility-row admin-visibility-row--single"><span>Detalhes ao abrir</span><label class="admin-switch"><input id="post-details-post" type="checkbox" checked><span class="admin-switch-ui"></span><em>Ativo</em></label><small>Desligado: foto, vídeo ou carrossel abre só a mídia. Sem mídia, o post abre só o texto.</small></div>
+            </div>
+          </div>
+          <label class="admin-field">Assinatura<input id="post-signature" type="text" maxlength="160" placeholder="Opcional"></label>
+          <label class="admin-field">Privacidade<select id="post-lock"><option value="">Público</option><option value="login">Precisa de login</option><option value="contract">Login + contrato</option></select></label>
+          <label class="admin-field">Categoria<input id="post-category" type="text" maxlength="40" value="FOTO"></label>
+          <label class="admin-toggle"><input id="post-published" type="checkbox" checked><span>Publicado no feed</span></label>
+        </div>
+
+        <div class="admin-preview-card" id="post-preview">
+          <span class="admin-kicker">PRÉ-VISUALIZAÇÃO</span>
+          <div class="admin-preview-empty">Adicione mídia ou comece a escrever para ver uma prévia.</div>
+        </div>
+
+        <div class="admin-editor-actions">
+          <button type="button" class="admin-ghost" id="save-draft">Salvar como rascunho</button>
+          <button type="button" class="admin-primary" id="publish-post">Publicar no Acervo</button>
+        </div>
+      </article>
+
+      <aside class="admin-panel admin-library">
+        <div class="admin-panel-head">
+          <div><span class="admin-kicker">GERENCIAR</span><h2>Acervo atual</h2></div>
+          <span class="admin-count" id="post-count">0 posts</span>
+        </div>
+        <div class="admin-filters">
+          <input type="search" id="manage-search" placeholder="Buscar título ou texto">
+          <select id="manage-kind"><option value="all">Todos os tipos</option><option value="photo">Fotos</option><option value="carousel">Carrosséis</option><option value="video">Vídeos</option><option value="gif">GIFs</option><option value="conversation">Conversas</option><option value="reference">Referências</option><option value="poem">Poesias</option><option value="lyric">Trechos</option><option value="compliment">Textos curtos</option></select>
+          <select id="manage-lock"><option value="all">Toda privacidade</option><option value="public">Públicos</option><option value="login">Login</option><option value="contract">Contrato</option></select>
+          <select id="manage-status"><option value="all">Publicados + rascunhos</option><option value="published">Publicados</option><option value="draft">Rascunhos</option></select>
+        </div>
+        <div class="admin-post-list" id="post-list"></div>
+
+        <div class="admin-orphans" id="orphan-section" hidden>
+          <div class="admin-section-title"><div><span class="admin-kicker">MÍDIAS SOLTAS</span><h3>Arquivos sem post</h3></div><span class="admin-count" id="orphan-count"></span></div>
+          <p>Estes arquivos já estão em <code>images/acervo/</code>, mas ainda não aparecem em nenhum post.</p>
+          <div class="admin-orphan-list" id="orphan-list"></div>
+        </div>
+
+        <div class="admin-backup-actions">
+          <button type="button" class="admin-ghost" id="export-backup">Exportar backup JSON</button>
+          <button type="button" class="admin-ghost" id="export-content">Exportar acervo-conteudo.js</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="admin-reset-backdrop" id="progress-reset-modal" aria-hidden="true">
+    <section class="admin-reset-dialog" role="dialog" aria-modal="true" aria-labelledby="progress-reset-title">
+      <button type="button" class="admin-reset-close" id="close-progress-reset" aria-label="Fechar">×</button>
+      <span class="admin-kicker">CONFIRMAÇÃO</span>
+      <h2 id="progress-reset-title">Reiniciar a experiência?</h2>
+      <p>Isso volta a experiência para o começo, mas <strong>não mexe nas fotos, poemas, vídeos ou posts do Acervo</strong>.</p>
+      <label>Senha
+        <input type="password" id="progress-reset-password" autocomplete="current-password" placeholder="Digite a senha da conta">
+      </label>
+      <small class="admin-reset-error" id="progress-reset-error" aria-live="polite"></small>
+      <div class="admin-reset-actions">
+        <button type="button" class="admin-ghost" id="cancel-progress-reset">Não, voltar</button>
+        <button type="button" class="admin-danger" id="confirm-progress-reset">Sim, reiniciar</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="admin-toast" id="admin-toast" role="status" aria-live="polite"></div>
+
+  <script src="js/acervo-conteudo.js"></script>
+  <script src="js/admin-acervo.js"></script>
+</body>
+</html>

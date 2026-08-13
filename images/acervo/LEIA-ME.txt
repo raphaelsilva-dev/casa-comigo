@@ -1,0 +1,205 @@
+ACERVO — COMO ADICIONAR CONTEÚDO
+
+A partir da V71, você NÃO precisa mexer no arquivo grande js/acervo.js para adicionar fotos.
+
+Abra:
+
+js/acervo-conteudo.js
+
+Lá existem modelos separados e bem espaçados de:
+- foto
+- poesia
+- elogio/texto curto
+- carrossel
+- GIF
+- vídeo
+- print/conversa
+
+Cada modelo começa com:
+
+enabled: false
+
+Preencha o bloco e depois altere para:
+
+enabled: true
+
+Para criar outro do mesmo tipo, copie o bloco inteiro e troque principalmente o campo id e os caminhos de media.
+
+IMPORTANTE: cada id deve ser único.
+
+Os seus arquivos de mídia continuam entrando nesta pasta:
+images/acervo/
+
+ACERVO — FOTOS, PRINTS, VÍDEOS E CARROSSÉIS
+
+A página acervo.html foi preparada para receber mídia de vários formatos.
+Os arquivos abaixo são apenas caminhos sugeridos; o site mostra um placeholder de vidro quando ainda não existem.
+
+Fotos / prints:
+- photo-01.jpg
+- photo-02.jpg
+- photo-03.jpg
+- conversa-01.jpg
+- referencia-01.jpg
+
+Carrossel:
+- carrossel-01-a.jpg
+- carrossel-01-b.jpg
+- carrossel-01-c.jpg
+
+Vídeo:
+- video-01.mp4
+
+As imagens das poesias continuam podendo usar images/poesias/poem-01.jpg até poem-08.jpg.
+
+Para adicionar, remover ou editar posts, abra js/acervo.js e procure por buildArchiveData().
+Cada post pode ter:
+- type: poem / compliment / photo / memory / video
+- media: lista de caminhos (uma imagem ou várias para carrossel)
+- wide: true para ocupar duas colunas na horizontal
+- comment: texto mostrado quando expandido
+- signature: assinatura opcional
+- lock: login ou contract, se quiser proteger o item
+
+
+============================================================
+V67 — COMO ADICIONAR NOVAS MÍDIAS AO ACERVO
+============================================================
+
+1) Copie o arquivo para esta pasta:
+   images/acervo/
+
+Exemplos:
+   foto-praia.jpg
+   print-bom-dia.png
+   reacao.gif
+   video-chamada.mp4
+
+2) Abra:
+   js/acervo.js
+
+3) Dentro da lista POSTS, adicione um objeto seguindo um dos modelos abaixo.
+
+FOTO SIMPLES
+{
+  id: "foto-praia",
+  type: "media",
+  category: "FOTO",
+  title: "Um dia bonito",
+  text: "Comentário opcional que só aparece ao expandir.",
+  signature: "",
+  media: ["images/acervo/foto-praia.jpg"],
+  wide: false,
+  lock: ""
+}
+
+GIF
+{
+  id: "gif-01",
+  type: "media",
+  category: "",
+  title: "Uma reação nossa",
+  text: "",
+  signature: "",
+  media: ["images/acervo/reacao.gif"],
+  wide: false,
+  lock: ""
+}
+
+CARROSSEL
+{
+  id: "album-01",
+  type: "media",
+  category: "CARROSSEL",
+  title: "Um pequeno álbum",
+  text: "Comentário opcional.",
+  signature: "",
+  media: [
+    "images/acervo/album-01-a.jpg",
+    "images/acervo/album-01-b.jpg",
+    "images/acervo/album-01-c.jpg"
+  ],
+  wide: true,
+  lock: ""
+}
+
+VÍDEO
+{
+  id: "video-02",
+  type: "media",
+  category: "VÍDEO",
+  title: "Um momento em movimento",
+  text: "",
+  signature: "",
+  media: ["images/acervo/video-02.mp4"],
+  wide: true,
+  lock: ""
+}
+
+BLOQUEIOS
+lock: ""         -> público
+lock: "login"    -> exige login
+lock: "contract" -> exige login + contrato assinado
+
+TAMANHO NO GRID
+wide: false -> 1 espaço
+wide: true  -> pode ocupar 2 espaços na horizontal
+
+FORMATOS
+Imagens: JPG, JPEG, PNG, WEBP e GIF funcionam pelo elemento de imagem.
+Vídeos: MP4, WEBM e MOV são reconhecidos pelo código atual.
+GIFs ficam animados normalmente no feed e no modo expandido.
+
+LIMITES
+Não existe um limite fixo programado de quantidade de posts nem de imagens por carrossel.
+O limite é prático: quanto mais arquivos pesados, maior o uso de memória e o tempo de carregamento.
+Para manter o site leve, prefira imagens otimizadas e evite muitos GIFs/vídeos muito pesados ao mesmo tempo.
+O feed infinito repete e embaralha os posts cadastrados; ele não exige criar cópias dos arquivos.
+
+
+V72 — FORMATO VERTICAL AUTOMÁTICO
+---------------------------------
+Fotos, GIFs e vídeos bem verticais (ex.: 900x1600) agora são detectados
+automaticamente. No feed, eles ocupam 1 coluna e 2 linhas, em vez de 2
+colunas na horizontal. Em uma grade 3x, pense em ocupar 1 + 4.
+
+Fotos horizontais continuam podendo ocupar 2 colunas.
+Fotos quase quadradas continuam usando 1 espaço normal.
+Não é necessário preencher um campo novo para isso.
+
+============================================================
+V73 — NOVO JEITO RECOMENDADO DE ADICIONAR CONTEÚDO
+============================================================
+Agora você não precisa editar objetos JavaScript na mão.
+
+1) Abra acervo.html.
+2) Abra a pesquisa.
+3) Digite: EDITARACERVO
+4) Pressione Enter.
+5) No painel, clique em “Selecionar pasta do projeto”.
+6) Escolha a pasta raiz do projeto, a que contém index.html, js/ e images/.
+7) Arraste fotos, GIFs ou vídeos, escreva o conteúdo e publique.
+
+O painel salva novas mídias automaticamente nesta pasta e atualiza:
+js/acervo-conteudo.js
+
+ENQUADRAMENTO
+- 1:1: quadrado estilo Instagram.
+- 4:5: retrato.
+- 9:16: vertical.
+- 16:9: horizontal.
+- Automático: mantém a lógica inteligente do feed.
+- Original: decide o espaço pelo formato real da mídia.
+
+O corte é apenas visual no FEED. Ao abrir a publicação, a imagem/vídeo original continua disponível inteira.
+
+MÍDIAS SOLTAS
+Depois de conectar a pasta, o painel mostra arquivos que já estão em images/acervo/ mas não foram cadastrados em nenhum post. Clique em “Criar post” para aproveitá-los sem fazer upload novamente.
+
+V74 — POESIAS / TEXTOS / LETRAS COM MÍDIA
+------------------------------------------
+No Editor do Acervo, você pode anexar uma foto também a Poesia, Texto curto ou Trecho de música.
+No feed, essa mídia vira um fundo borrado com efeito de vidro; o texto fica por cima.
+Ao abrir o post, a mídia original continua disponível inteira.
+
+Para letras de música, use o tipo “Trecho de música”. O feed não mostra o rótulo MÚSICA; ele exibe somente o conteúdo que você escreveu.

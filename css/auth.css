@@ -1,0 +1,101 @@
+/* ================================================================
+   CONTA "NÓS DOIS" — login fictício compartilhado entre páginas
+   ================================================================ */
+.auth-shell{position:relative;display:flex;align-items:center;flex:0 0 auto;z-index:180}
+.auth-entry,
+.auth-profile-button{height:42px;border:1px solid rgba(255,255,255,.46);border-radius:13px;background:rgba(255,255,255,.28);color:var(--navy-900);font:800 .78rem var(--font-body);display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 13px;cursor:pointer;backdrop-filter:blur(18px) saturate(128%);-webkit-backdrop-filter:blur(18px) saturate(128%);transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease}
+.auth-entry:hover,.auth-profile-button:hover{transform:translateY(-1px);background:rgba(255,255,255,.48);border-color:rgba(118,164,228,.26);box-shadow:0 10px 24px rgba(41,71,112,.10);color:var(--blue-500)}
+.auth-entry svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8}
+.auth-profile-button{width:42px;padding:0;border-radius:50%;overflow:hidden;position:relative}
+.auth-avatar{width:100%;height:100%;display:grid;place-items:center;position:relative;background:linear-gradient(145deg,rgba(255,255,255,.72),rgba(183,214,255,.48));font-weight:900;color:var(--navy-900)}
+.auth-avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.auth-avatar img.is-missing{display:none}
+.auth-avatar-fallback{font-size:.84rem;line-height:1}
+.auth-online-dot{position:absolute;right:0;bottom:1px;width:10px;height:10px;border-radius:50%;background:#55aa77;border:2px solid rgba(245,249,255,.95);box-shadow:0 0 0 2px rgba(85,170,119,.10);z-index:2}
+
+.auth-popover{position:absolute;top:calc(100% + 12px);right:0;width:min(330px,calc(100vw - 32px));padding:18px;border:1px solid rgba(255,255,255,.52);border-radius:17px;background:rgba(247,250,255,.58);box-shadow:0 24px 58px rgba(35,61,100,.16);backdrop-filter:blur(28px) saturate(136%);-webkit-backdrop-filter:blur(28px) saturate(136%);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale(.985);transform-origin:top right;transition:opacity .22s ease,transform .28s cubic-bezier(.22,1,.36,1),visibility .22s ease;z-index:220}
+.auth-shell.is-open .auth-popover{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.auth-popover-kicker{font:7.5px/1.7 var(--pixel);letter-spacing:.9px;color:var(--blue-500);text-transform:uppercase}
+.auth-popover h3{font-size:1.45rem;line-height:1.05;letter-spacing:-.035em;margin-top:9px}
+.auth-popover-lead{font-size:.78rem;line-height:1.55;margin-top:8px;color:rgba(14,32,59,.61)}
+.auth-form{margin-top:16px;display:grid;gap:11px}
+.auth-form label{display:grid;gap:6px}.auth-form label span{font-size:.69rem;font-weight:800;color:rgba(14,32,59,.59)}
+.auth-form input{height:45px;border-radius:11px;border:1px solid rgba(49,83,132,.13);background:rgba(255,255,255,.40);padding:0 12px;color:var(--navy-950);font:600 .82rem var(--font-body);outline:none;transition:.2s ease}
+.auth-form input:focus{background:rgba(255,255,255,.64);border-color:rgba(77,134,214,.44);box-shadow:0 0 0 4px rgba(77,134,214,.08)}
+.auth-error{min-height:16px;font-size:.68rem;line-height:1.35;color:#aa4545;font-weight:700}
+.auth-submit{height:45px;border:0;border-radius:11px;background:#081425;color:white;font:800 .8rem var(--font-body);cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+.auth-submit:hover{transform:translateY(-1px);background:#102746;box-shadow:0 12px 24px rgba(8,20,37,.15)}
+.auth-fine{display:block;margin-top:12px;padding-top:11px;border-top:1px solid rgba(49,83,132,.08);font-size:.62rem;line-height:1.45;color:rgba(14,32,59,.40)}
+.auth-account-head{display:flex;align-items:center;gap:11px}
+.auth-account-photo{width:46px;height:46px;border-radius:50%;overflow:hidden;position:relative;display:grid;place-items:center;background:rgba(255,255,255,.50);border:1px solid rgba(255,255,255,.54);font-weight:900}
+.auth-account-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.auth-account-photo img.is-missing{display:none}
+.auth-account-meta{min-width:0}.auth-account-meta strong{display:block;font-size:.9rem}.auth-account-meta small{display:block;margin-top:2px;font-size:.64rem;color:rgba(14,32,59,.48);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px}
+.auth-account-status{margin-top:14px;padding:10px 11px;border-radius:11px;background:rgba(255,255,255,.24);border:1px solid rgba(49,83,132,.08);font-size:.68rem;color:rgba(14,32,59,.56);display:flex;gap:8px;align-items:center}.auth-account-status::before{content:'';width:7px;height:7px;border-radius:50%;background:#55aa77;box-shadow:0 0 0 4px rgba(85,170,119,.10)}
+.auth-logout{width:100%;height:43px;margin-top:12px;border:1px solid rgba(49,83,132,.11);border-radius:11px;background:rgba(255,255,255,.28);color:var(--navy-900);font:800 .78rem var(--font-body);cursor:pointer;transition:.2s ease}.auth-logout:hover{background:rgba(255,255,255,.52);color:#994949}
+
+:root[data-theme="dark"] .auth-entry,:root[data-theme="dark"] .auth-profile-button{background:rgba(255,255,255,.045);border-color:rgba(163,200,252,.14);color:#edf5ff}
+:root[data-theme="dark"] .auth-entry:hover,:root[data-theme="dark"] .auth-profile-button:hover{background:rgba(106,159,232,.12);color:#8fc0ff;border-color:rgba(143,192,255,.24)}
+:root[data-theme="dark"] .auth-avatar{background:linear-gradient(145deg,rgba(43,72,112,.54),rgba(11,27,49,.54));color:#eef6ff}
+:root[data-theme="dark"] .auth-online-dot{border-color:#0b1728}
+:root[data-theme="dark"] .auth-popover{background:rgba(7,16,30,.68);border-color:rgba(166,201,255,.13);box-shadow:0 24px 58px rgba(0,0,0,.30)}
+:root[data-theme="dark"] .auth-popover-lead,:root[data-theme="dark"] .auth-form label span,:root[data-theme="dark"] .auth-account-status{color:rgba(226,237,255,.62)}
+:root[data-theme="dark"] .auth-form input{background:rgba(255,255,255,.05);border-color:rgba(166,201,255,.12);color:#f1f7ff}
+:root[data-theme="dark"] .auth-form input:focus{background:rgba(255,255,255,.075)}
+:root[data-theme="dark"] .auth-fine{color:rgba(218,232,252,.40);border-color:rgba(149,190,248,.10)}
+:root[data-theme="dark"] .auth-account-photo,:root[data-theme="dark"] .auth-account-status,:root[data-theme="dark"] .auth-logout{background:rgba(255,255,255,.045);border-color:rgba(166,201,255,.11)}
+:root[data-theme="dark"] .auth-account-meta small{color:rgba(222,235,255,.48)}
+:root[data-theme="dark"] .auth-logout{color:#edf5ff}:root[data-theme="dark"] .auth-logout:hover{background:rgba(173,74,74,.12);color:#ffb3b3}
+
+@media(max-width:1120px){
+  .auth-entry{width:42px;padding:0}.auth-entry-label{display:none}
+}
+@media(max-width:720px){
+  .auth-shell{order:3}.auth-entry,.auth-profile-button{width:40px;height:40px;border-radius:12px}.auth-profile-button{border-radius:50%}
+  .auth-popover{position:fixed;top:82px;right:12px;left:12px;width:auto;max-width:420px;margin-left:auto}
+}
+
+
+/* v49 — conta sempre no canto direito, depois do seletor de tema */
+.site-hotbar .music-mini-player{order:1}.site-hotbar .lang-switcher{order:2}.site-hotbar .theme-toggle{order:3}.site-hotbar .auth-shell{order:4}.site-hotbar .hotbar-cta{order:5}.site-hotbar .hotbar-menu-toggle{order:6}
+.sub-hotbar .sub-player{order:1}.sub-hotbar .sub-lang-switcher{order:2}.sub-hotbar .theme-toggle{order:3}.sub-hotbar .auth-shell{order:4}
+@media(max-width:720px){.auth-shell{order:initial}.site-hotbar .auth-shell{order:5}.sub-hotbar .auth-shell{order:4}}
+
+
+/* v50 — conta mais limpa + ordem fixa da hotbar */
+.auth-account-status,.auth-popover-kicker{display:none!important}
+.auth-popover .auth-account-head{margin:0}
+.auth-popover .auth-logout{margin-top:16px}
+.auth-popover{padding:17px}
+.site-hotbar .music-mini-player{order:1}.site-hotbar .lang-switcher{order:2}.site-hotbar .theme-toggle{order:3}.site-hotbar .auth-shell{order:4}.site-hotbar .hotbar-cta{order:5}.site-hotbar .hotbar-menu-toggle{order:6}
+.auth-welcome-toast{position:fixed;right:24px;top:116px;z-index:500;display:flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid rgba(255,255,255,.52);border-radius:14px;background:rgba(247,250,255,.58);box-shadow:0 18px 42px rgba(35,61,100,.14);backdrop-filter:blur(24px) saturate(132%);-webkit-backdrop-filter:blur(24px) saturate(132%);opacity:0;transform:translateY(-10px) scale(.98);pointer-events:none;transition:.28s cubic-bezier(.22,1,.36,1)}
+.auth-welcome-toast.is-visible{opacity:1;transform:none}.auth-welcome-toast span{color:var(--blue-500);font-size:1rem}.auth-welcome-toast strong{font-size:.78rem;color:var(--navy-900)}
+:root[data-theme="dark"] .auth-welcome-toast{background:rgba(7,16,30,.68);border-color:rgba(166,201,255,.13);box-shadow:0 18px 42px rgba(0,0,0,.28)}:root[data-theme="dark"] .auth-welcome-toast strong{color:#edf5ff}
+@media(max-width:720px){.auth-welcome-toast{top:82px;right:12px;left:12px;justify-content:center}}
+
+
+/* v53 — login do cabeçalho em modal central com fundo desfocado */
+.auth-login-backdrop{position:fixed;inset:0;z-index:900;display:grid;place-items:center;padding:22px;background:rgba(218,231,248,.24);backdrop-filter:blur(15px) saturate(106%);-webkit-backdrop-filter:blur(15px) saturate(106%);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s ease,visibility .28s ease}
+.auth-login-backdrop.is-open{opacity:1;visibility:visible;pointer-events:auto}
+.auth-login-modal{position:relative;width:min(500px,100%);padding:34px;border-radius:20px;border:1px solid rgba(255,255,255,.58);background:rgba(244,249,255,.56);box-shadow:0 30px 80px rgba(29,58,99,.20);backdrop-filter:blur(28px) saturate(132%);-webkit-backdrop-filter:blur(28px) saturate(132%);transform:translateY(16px) scale(.975);transition:transform .34s cubic-bezier(.22,1,.36,1)}
+.auth-login-backdrop.is-open .auth-login-modal{transform:none}
+.auth-login-close{position:absolute;right:16px;top:16px;width:42px;height:42px;border-radius:13px;border:1px solid rgba(49,83,132,.12);background:rgba(255,255,255,.34);color:var(--navy-900);font:900 1.25rem/1 var(--font-body);cursor:pointer}
+.auth-login-content h2{padding-right:52px;font-size:2.15rem;line-height:1.02;letter-spacing:-.045em}
+.auth-login-content>p{margin-top:12px;color:rgba(14,32,59,.64);line-height:1.6}
+.auth-modal-form{margin-top:24px;display:grid;gap:12px}.auth-modal-form label{display:grid;gap:7px}.auth-modal-form label span{font-size:.71rem;font-weight:800;color:rgba(14,32,59,.59)}.auth-modal-form input{height:48px;border-radius:12px;border:1px solid rgba(49,83,132,.13);background:rgba(255,255,255,.40);padding:0 13px;color:var(--navy-950);font:600 .84rem var(--font-body);outline:none}.auth-modal-form input:focus{background:rgba(255,255,255,.64);border-color:rgba(77,134,214,.44);box-shadow:0 0 0 4px rgba(77,134,214,.08)}
+body.auth-modal-open{overflow:hidden}
+:root[data-theme="dark"] .auth-login-backdrop{background:rgba(2,8,17,.34)}
+:root[data-theme="dark"] .auth-login-modal{background:rgba(7,16,30,.62);border-color:rgba(166,201,255,.14);box-shadow:0 30px 80px rgba(0,0,0,.36)}
+:root[data-theme="dark"] .auth-login-close{background:rgba(255,255,255,.05);border-color:rgba(166,201,255,.13);color:#eef6ff}
+:root[data-theme="dark"] .auth-login-content>p,:root[data-theme="dark"] .auth-modal-form label span{color:rgba(226,237,255,.62)}
+:root[data-theme="dark"] .auth-modal-form input{background:rgba(255,255,255,.055);border-color:rgba(166,201,255,.13);color:#eef6ff}
+@media(max-width:600px){.auth-login-modal{padding:28px 20px;border-radius:17px}.auth-login-content h2{font-size:1.85rem}}
+
+
+/* v54 — botão de login indica quando o formulário está pronto */
+.auth-submit{background:rgba(20,45,78,.72);color:#fff;opacity:.58;box-shadow:none;cursor:not-allowed}
+.auth-submit:disabled:hover{transform:none;background:rgba(20,45,78,.72);box-shadow:none}
+.auth-submit:not(:disabled){opacity:1;cursor:pointer;background:#081425;box-shadow:0 10px 24px rgba(8,20,37,.12)}
+.auth-submit:not(:disabled):hover{background:#102746;transform:translateY(-1px)}
+:root[data-theme="dark"] .auth-submit{background:rgba(205,224,249,.16);color:rgba(238,246,255,.62)}
+:root[data-theme="dark"] .auth-submit:not(:disabled){background:#dbeaff;color:#07101d;box-shadow:0 12px 28px rgba(0,0,0,.20)}
+:root[data-theme="dark"] .auth-submit:not(:disabled):hover{background:#f2f7ff}

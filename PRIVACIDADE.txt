@@ -1,0 +1,11 @@
+PRIVACIDADE DO SITE
+
+Esta versão inclui:
+- robots.txt bloqueando rastreamento voluntário por buscadores;
+- meta robots noindex/nofollow/noimageindex nas páginas;
+- thumbnails sem metadados EXIF para o feed;
+- originais carregados apenas quando a publicação é aberta.
+
+IMPORTANTE: isso reduz exposição e indexação, mas NÃO transforma um GitHub Pages público em armazenamento privado.
+Qualquer arquivo hospedado publicamente pode ser acessado por quem souber ou descobrir a URL.
+Para proteção real, use autenticação no servidor + armazenamento privado e URLs temporárias/assinadas.

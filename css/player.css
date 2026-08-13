@@ -1,0 +1,95 @@
+/* PLAYER COMPARTILHADO NAS SUBPÁGINAS */
+.sub-actions{display:flex;align-items:center;gap:6px;margin-left:10px}
+.sub-player{position:relative;display:flex;align-items:center;flex:0 0 auto}
+.sub-player::after{content:"";position:absolute;top:100%;right:0;width:100%;height:14px}
+.sub-music-control{min-width:48px;max-width:215px;height:42px;padding:0 10px;border:0;border-radius:13px;background:transparent;color:#11151d;display:flex;align-items:center;justify-content:flex-start;gap:7px;cursor:pointer;overflow:hidden;white-space:nowrap;transition:background .18s ease,color .18s ease,transform .18s ease}
+.sub-music-control:hover,.sub-music-control:focus-visible{background:rgba(70,111,175,.08);color:var(--blue-500);transform:translateY(-1px);outline:none}
+.sub-music-note{font-size:1.08rem;line-height:1;flex:0 0 auto}.sub-music-icon{width:16px;height:16px;fill:currentColor;flex:0 0 auto}.sub-music-icon.pause{display:none}.sub-music-control.playing .sub-music-icon.play{display:none}.sub-music-control.playing .sub-music-icon.pause{display:block}.sub-music-control.playing{color:var(--blue-500)}
+.sub-music-title{display:inline-block;max-width:0;opacity:0;overflow:hidden;transform:translateX(-8px);font-size:.72rem;font-weight:700;text-overflow:ellipsis;white-space:nowrap;transition:max-width .42s cubic-bezier(.22,1,.36,1),opacity .22s ease,transform .42s cubic-bezier(.22,1,.36,1)}
+.sub-music-control.playing .sub-music-title{max-width:118px;opacity:1;transform:none}
+.sub-music-menu{position:absolute;top:calc(100% + 10px);right:0;width:min(320px,86vw);padding:10px;border:1px solid rgba(255,255,255,.54);border-radius:18px;background:rgba(248,247,244,.78);box-shadow:0 20px 42px rgba(38,61,96,.14);backdrop-filter:blur(22px) saturate(128%);-webkit-backdrop-filter:blur(22px) saturate(128%);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale(.985);transform-origin:top right;transition:opacity .18s ease,visibility .18s ease,transform .24s cubic-bezier(.22,1,.36,1);z-index:50}
+@media(hover:hover) and (pointer:fine){.sub-player:hover .sub-music-menu{opacity:1;visibility:visible;pointer-events:auto;transform:none}}
+.sub-player.menu-open .sub-music-menu{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.sub-music-menu-head{display:flex;justify-content:space-between;gap:12px;padding:7px 9px 10px;color:rgba(17,21,29,.56);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}.sub-music-list{display:flex;flex-direction:column;gap:4px;max-height:300px;overflow-y:auto;overflow-x:hidden;scrollbar-width:none}.sub-music-list::-webkit-scrollbar{display:none;width:0;height:0}.sub-track{width:100%;display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:9px;padding:10px 9px;border:0;border-radius:12px;background:transparent;color:#172236;text-align:left;cursor:pointer;transition:.18s ease}.sub-track:hover,.sub-track:focus-visible,.sub-track.active{background:rgba(91,139,207,.11);color:var(--blue-500);outline:none}.sub-track-index{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(50,83,132,.12);border-radius:9px;font-size:.68rem;color:rgba(25,42,68,.62)}.sub-track-copy{min-width:0;display:flex;flex-direction:column;gap:2px}.sub-track-title,.sub-track-artist{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sub-track-title{font-size:.82rem;font-weight:700}.sub-track-artist{font-size:.68rem;color:rgba(23,34,54,.54)}.sub-track.active .sub-track-artist{color:rgba(77,134,214,.72)}.sub-track-mark{font-size:.7rem;opacity:0}.sub-track.active .sub-track-mark{opacity:1}
+:root[data-theme="dark"] .sub-music-control{color:#edf5ff}:root[data-theme="dark"] .sub-music-menu{background:rgba(8,18,34,.94);border-color:rgba(155,197,255,.15);box-shadow:0 22px 48px rgba(0,0,0,.34)}:root[data-theme="dark"] .sub-music-menu-head,:root[data-theme="dark"] .sub-track-index,:root[data-theme="dark"] .sub-track-artist{color:rgba(222,236,255,.58)}:root[data-theme="dark"] .sub-track{color:#e7f0ff}:root[data-theme="dark"] .sub-track:hover,:root[data-theme="dark"] .sub-track:focus-visible,:root[data-theme="dark"] .sub-track.active{background:rgba(103,157,235,.14);color:#8fc0ff}:root[data-theme="dark"] .sub-track.active .sub-track-artist{color:rgba(143,192,255,.72)}
+@media(max-width:900px){.sub-actions{margin-left:auto}.sub-player .sub-music-title{display:none}.sub-music-control{min-width:40px;width:40px;padding:0;justify-content:center}.sub-music-note{display:none}.sub-music-menu{right:-48px}}
+@media(max-width:620px){.sub-actions{gap:2px}.sub-music-menu{right:-88px;width:min(300px,92vw)}}
+
+/* v40 — player sempre utilizável nas páginas extras */
+.sub-music-menu{z-index:120}
+.sub-music-list{overscroll-behavior:contain}
+.sub-music-control.playing .sub-music-title{max-width:132px}
+
+
+/* ====================================================================
+   V79 — PLAYER CENTRALIZADO NO MOBILE + ACESSIBILIDADE
+   ==================================================================== */
+.sub-music-menu-close{display:none;appearance:none;border:0;background:transparent;color:inherit;width:40px;height:40px;border-radius:10px;font:900 1.15rem/1 var(--font-body);cursor:pointer}
+.sub-music-menu-close:hover,.sub-music-menu-close:focus-visible{background:rgba(86,135,203,.10);color:var(--blue-500);outline:2px solid rgba(77,134,214,.32);outline-offset:2px}
+.sub-track:focus-visible{outline:2px solid rgba(77,134,214,.50);outline-offset:-2px}
+@media(max-width:760px),(hover:none) and (pointer:coarse){
+  .sub-music-menu.is-mobile-open{
+    position:fixed!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;
+    width:min(380px,calc(100vw - 28px))!important;max-height:min(72vh,620px);padding:12px!important;
+    border-radius:14px!important;z-index:1200!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;
+    transform:translate(-50%,-50%) scale(1)!important;transform-origin:center!important;
+    background:rgba(244,248,255,.92)!important;border:1px solid rgba(82,119,169,.16)!important;
+    box-shadow:0 28px 80px rgba(13,35,68,.28)!important;backdrop-filter:blur(30px) saturate(124%)!important;-webkit-backdrop-filter:blur(30px) saturate(124%)!important;
+  }
+  :root[data-theme="dark"] .sub-music-menu.is-mobile-open{background:rgba(7,18,34,.94)!important;border-color:rgba(157,199,255,.14)!important;box-shadow:0 30px 88px rgba(0,0,0,.42)!important}
+  .sub-music-menu.is-mobile-open .sub-music-menu-head{min-height:48px;padding:4px 6px 8px 10px;align-items:center}
+  .sub-music-menu.is-mobile-open .sub-music-menu-note{display:none}
+  .sub-music-menu.is-mobile-open .sub-music-menu-close{display:grid;place-items:center;margin-left:auto;flex:0 0 40px}
+  .sub-music-menu.is-mobile-open .sub-music-list{max-height:min(56vh,480px);padding:2px}
+  .sub-music-menu.is-mobile-open .sub-track{min-height:54px;padding:10px 9px;border-radius:10px;touch-action:manipulation}
+  .sub-music-menu.is-mobile-open .sub-track-title{font-size:.88rem}
+  .sub-music-menu.is-mobile-open .sub-track-artist{font-size:.72rem}
+}
+@media(prefers-reduced-motion:reduce){.sub-music-control,.sub-music-menu,.sub-track{transition:none!important}}
+
+/* ================================================================
+   V81 — PLAYER: RESPIRO NO DESKTOP + COMPACTO GARANTIDO NO MOBILE
+   ================================================================ */
+@media(min-width:901px) and (hover:hover) and (pointer:fine){
+  .sub-music-menu{top:calc(100% + 18px)}
+}
+@media(max-width:900px){
+  .sub-actions{min-width:0;max-width:calc(100% - 68px);margin-left:auto;gap:4px;display:flex;align-items:center;justify-content:flex-end}
+  .sub-player{flex:0 0 40px;min-width:40px;max-width:40px}
+  .sub-music-control{width:40px!important;min-width:40px!important;max-width:40px!important;height:40px!important;padding:0!important;justify-content:center!important;gap:0!important;overflow:hidden!important}
+  .sub-music-title,.sub-music-note{display:none!important;max-width:0!important}
+  .sub-music-menu.is-mobile-open{
+    position:fixed!important;left:50%!important;top:50%!important;right:auto!important;
+    width:min(380px,calc(100vw - 24px))!important;max-height:min(76dvh,640px)!important;
+    transform:translate(-50%,-50%)!important;
+  }
+}
+@media(max-width:540px){
+  .sub-actions{gap:2px;max-width:calc(100% - 54px)}
+  .sub-lang-current{width:42px!important;min-width:42px!important;padding:0!important;justify-content:center!important}
+  .sub-lang-current .sub-caret{display:none!important}
+  .sub-hotbar .theme-toggle,.sub-hotbar .auth-entry,.sub-hotbar .auth-profile-button,.sub-menu-toggle{width:40px!important;min-width:40px!important;height:40px!important;flex-basis:40px!important}
+}
+
+/* ================================================================
+   V82 — SUBPAGES: PLAYER MOBILE CENTRALIZADO PELO VIEWPORT
+   ================================================================ */
+@media(max-width:900px){
+  body.music-menu-modal-open{width:100%;overflow:hidden!important}
+  .sub-music-menu.is-mobile-open{
+    left:max(12px,env(safe-area-inset-left))!important;
+    right:max(12px,env(safe-area-inset-right))!important;
+    top:50%!important;
+    bottom:auto!important;
+    width:auto!important;
+    max-width:none!important;
+    box-sizing:border-box!important;
+    transform:translateY(-50%)!important;
+    margin:0!important;
+  }
+  .sub-music-menu.is-mobile-open .sub-music-list{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+}
+@media(max-width:350px){
+  .sub-music-menu.is-mobile-open{left:8px!important;right:8px!important;padding:10px!important}
+  .sub-music-menu.is-mobile-open .sub-track{min-height:50px;padding:8px 7px}
+}
