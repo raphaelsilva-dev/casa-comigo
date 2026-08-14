@@ -1,9 +1,0 @@
-ÍCONE DA ABA / FAVICON
-
-Substitua/adicione aqui um arquivo chamado:
-favicon.png
-
-O index.html já está apontando para:
-images/favicon/favicon.png
-
-Recomendação: imagem quadrada, por exemplo 512x512 px.
