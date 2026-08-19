@@ -1,4 +1,3 @@
-/* PLAYER COMPARTILHADO NAS SUBPÁGINAS */
 .sub-actions{display:flex;align-items:center;gap:6px;margin-left:10px}
 .sub-player{position:relative;display:flex;align-items:center;flex:0 0 auto}
 .sub-player::after{content:"";position:absolute;top:100%;right:0;width:100%;height:14px}
@@ -15,15 +14,11 @@
 @media(max-width:900px){.sub-actions{margin-left:auto}.sub-player .sub-music-title{display:none}.sub-music-control{min-width:40px;width:40px;padding:0;justify-content:center}.sub-music-note{display:none}.sub-music-menu{right:-48px}}
 @media(max-width:620px){.sub-actions{gap:2px}.sub-music-menu{right:-88px;width:min(300px,92vw)}}
 
-/* v40 — player sempre utilizável nas páginas extras */
 .sub-music-menu{z-index:120}
 .sub-music-list{overscroll-behavior:contain}
 .sub-music-control.playing .sub-music-title{max-width:132px}
 
 
-/* ====================================================================
-   V79 — PLAYER CENTRALIZADO NO MOBILE + ACESSIBILIDADE
-   ==================================================================== */
 .sub-music-menu-close{display:none;appearance:none;border:0;background:transparent;color:inherit;width:40px;height:40px;border-radius:10px;font:900 1.15rem/1 var(--font-body);cursor:pointer}
 .sub-music-menu-close:hover,.sub-music-menu-close:focus-visible{background:rgba(86,135,203,.10);color:var(--blue-500);outline:2px solid rgba(77,134,214,.32);outline-offset:2px}
 .sub-track:focus-visible{outline:2px solid rgba(77,134,214,.50);outline-offset:-2px}
@@ -47,9 +42,7 @@
 }
 @media(prefers-reduced-motion:reduce){.sub-music-control,.sub-music-menu,.sub-track{transition:none!important}}
 
-/* ================================================================
-   V81 — PLAYER: RESPIRO NO DESKTOP + COMPACTO GARANTIDO NO MOBILE
-   ================================================================ */
+
 @media(min-width:901px) and (hover:hover) and (pointer:fine){
   .sub-music-menu{top:calc(100% + 18px)}
 }
@@ -71,9 +64,7 @@
   .sub-hotbar .theme-toggle,.sub-hotbar .auth-entry,.sub-hotbar .auth-profile-button,.sub-menu-toggle{width:40px!important;min-width:40px!important;height:40px!important;flex-basis:40px!important}
 }
 
-/* ================================================================
-   V82 — SUBPAGES: PLAYER MOBILE CENTRALIZADO PELO VIEWPORT
-   ================================================================ */
+
 @media(max-width:900px){
   body.music-menu-modal-open{width:100%;overflow:hidden!important}
   .sub-music-menu.is-mobile-open{
