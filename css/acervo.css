@@ -1,6 +1,3 @@
-/* ====================================================================
-   ACERVO — feed misto de fotos, poesias, elogios, prints e referências
-   ==================================================================== */
 .archive-hero{max-width:920px;margin-bottom:54px}
 .archive-toolbar{margin-top:28px;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
 .archive-shuffle{border:1px solid rgba(34,65,109,.11);border-radius:14px;padding:12px 16px;background:rgba(255,255,255,.42);color:var(--navy-950);font:800 .88rem/1 var(--font-body);cursor:pointer;backdrop-filter:blur(18px) saturate(120%);-webkit-backdrop-filter:blur(18px) saturate(120%);transition:transform .22s ease,background .22s ease,box-shadow .22s ease}
@@ -88,9 +85,6 @@
 .archive-media-fallback.is-visible{z-index:2!important}.archive-card-media.is-missing{opacity:0}
 
 
-/* ====================================================================
-   v58 — feed mais slim, poesia estilo post e navegação contínua
-   ==================================================================== */
 .archive-toolbar{margin-top:24px;gap:8px}
 .archive-shuffle{
   width:42px;height:42px;padding:0;display:grid;place-items:center;
@@ -158,7 +152,6 @@
 .archive-post-swap{animation:archivePostSwap .28s cubic-bezier(.22,1,.36,1)}
 @keyframes archivePostSwap{0%{opacity:.55;transform:translateX(10px) scale(.992)}100%{opacity:1;transform:none}}
 
-/* A trava surpresa após a etapa inicial não denuncia a quantidade antes da hora. */
 .archive-card.is-cycle-locked{opacity:.48;filter:saturate(.62)}
 .archive-card.is-cycle-locked::after{content:"ENTRAR";font-size:7px}
 
@@ -176,9 +169,6 @@
 :root[data-theme="dark"] .archive-lock-action.is-plan-route{background:rgba(55,112,187,.76);color:#f5f9ff}
 
 
-/* ====================================================================
-   v59 — respiro maior no hero + shuffle lateral + grade mobile 3 colunas
-   ==================================================================== */
 .archive-hero{
   margin-bottom:92px;
 }
@@ -304,9 +294,7 @@
 }
 
 
-/* ====================================================================
-   v62 — identidade M❤R + navegação central + feed realmente contínuo
-   ==================================================================== */
+
 .archive-title{display:flex;flex-direction:column;align-items:center;gap:0;line-height:.88}
 .archive-title-mark{display:block;font:inherit;line-height:.88;letter-spacing:-.055em;margin-top:8px}
 .archive-hero .page-lead{max-width:800px;line-height:1.78}
@@ -321,10 +309,7 @@
 }
 
 
-/* ====================================================================
-   v64 — ACERVO: legibilidade, acessibilidade e bloqueio visual simples
-   ==================================================================== */
-/* Cards um pouco mais retos e borda quase imperceptível. */
+
 .archive-card{
   border-radius:6px;
   border-color:rgba(72,108,158,.055);
@@ -432,9 +417,7 @@
   .archive-card-sign{font-size:6px!important}
 }
 
-/* ====================================================================
-   v65 — ACERVO: clique desktop, busca, contador afetivo e título em caixa alta
-   ==================================================================== */
+
 .archive-title [data-archive-title-main]{text-transform:uppercase}
 .archive-grid{position:relative;z-index:1}
 .archive-card{pointer-events:auto;touch-action:manipulation}
@@ -482,10 +465,7 @@
 }
 
 
-/* ====================================================================
-   v66 — ACERVO: busca integrada, cards de pesquisa 1:1 e tipografia desktop
-   ==================================================================== */
-/* Busca com borda única e proporções mais confortáveis no desktop. */
+
 .archive-search{
   height:48px;
   border-radius:12px;
@@ -559,14 +539,7 @@
 }
 
 
-/* ====================================================================
-   v72 — tiles verticais ocupam duas linhas, não duas colunas
-   ==================================================================== */
-/*
-   Fotos/GIFs/vídeos em retrato são detectados pelo JS. Em vez de roubar
-   duas colunas do feed, o card fica em uma coluna e cresce para baixo,
-   equivalente às posições 1 + 4 de uma grade 3x.
-*/
+
 .archive-card.is-tall{
   grid-column:span 1!important;
   grid-row:span 2;
@@ -601,9 +574,7 @@
   .archive-card.is-tall .archive-card-media{height:100%!important}
 }
 
-/* ====================================================================
-   v73 — enquadramento manual do feed (painel do Acervo)
-   ==================================================================== */
+
 .archive-card-media{
   object-position:50% 50%;
   transform:scale(var(--archive-feed-zoom,1)) rotate(var(--archive-feed-rotate,0deg));
@@ -635,9 +606,7 @@
   transform:scale(calc(var(--archive-feed-zoom,1) * 1.04)) rotate(var(--archive-feed-rotate,0deg));
 }
 
-/* ====================================================================
-   v74 — textos com mídia: foto borrada + vidro; letras sem rótulo
-   ==================================================================== */
+
 .archive-card.is-lyric{min-height:230px;grid-column:span 1!important;justify-content:center}
 .archive-card.is-lyric h2{font-size:clamp(1.35rem,2vw,1.72rem)}
 .archive-card.is-lyric p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
@@ -695,9 +664,7 @@
 }
 
 
-/* ====================================================================
-   v75 — mídia borrada sem afetar texto + assinatura apenas no modal
-   ==================================================================== */
+
 .archive-card.is-text-post.has-text-media .archive-card-copy--text,
 .archive-card.is-text-post.has-text-media .archive-card-copy--text h2,
 .archive-card.is-text-post.has-text-media .archive-card-copy--text p,
@@ -729,9 +696,7 @@
 .archive-card.is-protected .archive-card-copy--text .archive-card-category{filter:blur(5px)}
 
 
-/* ====================================================================
-   V79 — TEXTO NÍTIDO + FEED MOBILE MAIS LEGÍVEL E ACESSÍVEL
-   ==================================================================== */
+
 /* O cadeado limita a abertura do conteúdo, mas não borra mais o teaser textual. */
 .archive-card.is-protected .archive-card-copy p,
 .archive-card.is-protected .archive-card-copy--text h2,
@@ -793,11 +758,7 @@
   .archive-card-sign,.archive-viewer-signature,.archive-card-category,.archive-viewer-category,.archive-poem-media-hint,.archive-lock-kicker{animation:none!important}
 }
 
-/* ====================================================================
-   V80 — GRADE 3x ESTÁVEL, TEXTO NÍTIDO E FEED MAIS LEVE
-   ==================================================================== */
-/* Uma célula = um quadrado. O JS calcula o tamanho e impede dois cards
-   grandes de disputarem a mesma linha. */
+
 .archive-grid{
   grid-template-columns:repeat(3,minmax(0,1fr))!important;
   grid-auto-rows:var(--archive-cell-size,auto);
@@ -872,11 +833,11 @@
 :root[data-theme="dark"] .archive-card.is-text-post.has-text-media p{color:rgba(238,245,255,.86)!important}
 :root[data-theme="dark"] .archive-card.is-text-post.has-text-media .archive-card-category{color:#8ec2ff!important}
 
-/* Categoria de poesia/música sempre legível sobre qualquer fundo. */
+
 .archive-card.is-lyric .archive-card-category,.archive-card.is-poem .archive-card-category{position:relative;z-index:3}
 .archive-card.is-lyric .archive-card-category{white-space:nowrap}
 
-/* Busca continua 1:1, mas usa a mesma altura das células. */
+
 .archive-grid.is-searching .archive-card{height:var(--archive-cell-size,auto)!important;min-height:0!important;aspect-ratio:auto!important;grid-row:span 1!important;grid-column:span 1!important}
 
 @media(max-width:920px){.archive-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
@@ -907,10 +868,7 @@
 }
 
 
-/* ====================================================================
-   V83 — VIEWER ADAPTATIVO: MÍDIA-ONLY / TEXTO-ONLY
-   ==================================================================== */
-/* Foto, vídeo ou carrossel sem conteúdo visível abre apenas a mídia. */
+
 .archive-viewer.has-media:not(.has-copy) .archive-viewer-card{
   grid-template-columns:1fr!important;
   grid-template-rows:1fr!important;
@@ -919,7 +877,7 @@
 .archive-viewer.has-media:not(.has-copy) .archive-viewer-copy{display:none!important}
 .archive-viewer.has-media:not(.has-copy) .archive-viewer-media{display:grid!important}
 
-/* Poesia/trecho/texto sem imagem não ganha um espaço de mídia artificial. */
+
 .archive-viewer:not(.has-media) .archive-viewer-card{
   grid-template-columns:1fr!important;
   grid-template-rows:1fr!important;
@@ -943,14 +901,7 @@
   .archive-viewer:not(.has-media) .archive-viewer-copy{padding:70px 24px 34px}
 }
 
-/* ====================================================================
-   V84 — LEITURA LONGA NO VIEWER
-   ==================================================================== */
-/*
-   Posts somente de texto podem ultrapassar a altura da janela.
-   O cartão permanece dentro do viewport e o conteúdo passa a rolar
-   internamente, preservando a tipografia e uma margem confortável no fim.
-*/
+
 .archive-viewer:not(.has-media) .archive-viewer-card{
   height:min(90dvh,860px)!important;
   min-height:0!important;
