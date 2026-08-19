@@ -1,6 +1,4 @@
-/* ================================================================
-   CONTA "NÓS DOIS" — login fictício compartilhado entre páginas
-   ================================================================ */
+/* Login fictício compartilhado entre páginas */
 .auth-shell{position:relative;display:flex;align-items:center;flex:0 0 auto;z-index:180}
 .auth-entry,
 .auth-profile-button{height:42px;border:1px solid rgba(255,255,255,.46);border-radius:13px;background:rgba(255,255,255,.28);color:var(--navy-900);font:800 .78rem var(--font-body);display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 13px;cursor:pointer;backdrop-filter:blur(18px) saturate(128%);-webkit-backdrop-filter:blur(18px) saturate(128%);transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease}
@@ -55,13 +53,13 @@
 }
 
 
-/* v49 — conta sempre no canto direito, depois do seletor de tema */
+
 .site-hotbar .music-mini-player{order:1}.site-hotbar .lang-switcher{order:2}.site-hotbar .theme-toggle{order:3}.site-hotbar .auth-shell{order:4}.site-hotbar .hotbar-cta{order:5}.site-hotbar .hotbar-menu-toggle{order:6}
 .sub-hotbar .sub-player{order:1}.sub-hotbar .sub-lang-switcher{order:2}.sub-hotbar .theme-toggle{order:3}.sub-hotbar .auth-shell{order:4}
 @media(max-width:720px){.auth-shell{order:initial}.site-hotbar .auth-shell{order:5}.sub-hotbar .auth-shell{order:4}}
 
 
-/* v50 — conta mais limpa + ordem fixa da hotbar */
+
 .auth-account-status,.auth-popover-kicker{display:none!important}
 .auth-popover .auth-account-head{margin:0}
 .auth-popover .auth-logout{margin-top:16px}
@@ -73,7 +71,7 @@
 @media(max-width:720px){.auth-welcome-toast{top:82px;right:12px;left:12px;justify-content:center}}
 
 
-/* v53 — login do cabeçalho em modal central com fundo desfocado */
+
 .auth-login-backdrop{position:fixed;inset:0;z-index:900;display:grid;place-items:center;padding:22px;background:rgba(218,231,248,.24);backdrop-filter:blur(15px) saturate(106%);-webkit-backdrop-filter:blur(15px) saturate(106%);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .28s ease,visibility .28s ease}
 .auth-login-backdrop.is-open{opacity:1;visibility:visible;pointer-events:auto}
 .auth-login-modal{position:relative;width:min(500px,100%);padding:34px;border-radius:20px;border:1px solid rgba(255,255,255,.58);background:rgba(244,249,255,.56);box-shadow:0 30px 80px rgba(29,58,99,.20);backdrop-filter:blur(28px) saturate(132%);-webkit-backdrop-filter:blur(28px) saturate(132%);transform:translateY(16px) scale(.975);transition:transform .34s cubic-bezier(.22,1,.36,1)}
@@ -91,7 +89,7 @@ body.auth-modal-open{overflow:hidden}
 @media(max-width:600px){.auth-login-modal{padding:28px 20px;border-radius:17px}.auth-login-content h2{font-size:1.85rem}}
 
 
-/* v54 — botão de login indica quando o formulário está pronto */
+
 .auth-submit{background:rgba(20,45,78,.72);color:#fff;opacity:.58;box-shadow:none;cursor:not-allowed}
 .auth-submit:disabled:hover{transform:none;background:rgba(20,45,78,.72);box-shadow:none}
 .auth-submit:not(:disabled){opacity:1;cursor:pointer;background:#081425;box-shadow:0 10px 24px rgba(8,20,37,.12)}
