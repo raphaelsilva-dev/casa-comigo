@@ -1,10 +1,4 @@
-/* ==========================================================
-   VARIÁVEIS GLOBAIS — NOSSO CAPÍTULO
-   Edite este arquivo para mudar cores, fontes e tokens visuais.
-   ========================================================== */
-
 :root{
-  /* CORES */
   --navy-950:#04101f;
   --navy-900:#0a1b36;
   --navy-800:#132a52;
@@ -23,15 +17,14 @@
   --font-body:'Roboto Slab', Georgia, serif;
   --font-heading:'Roboto Slab', Georgia, serif;
   --font-display:'Roboto Slab', Georgia, serif;
-  --font-script:var(--font-display); /* alias legado */
+  --font-script:var(--font-display);
   --font-pixel:'Press Start 2P', monospace;
 
-  /* aliases mantidos para o restante do CSS */
   --sans:var(--font-body);
   --serif:var(--font-body);
   --pixel:var(--font-pixel);
 
-  /* TAMANHOS */
+
   --font-size-body:1rem;
   --line-height-body:1.68;
   --font-weight-regular:400;
@@ -39,12 +32,11 @@
   --font-weight-bold:700;
   --font-weight-black:900;
 
-  /* FORMAS */
+
   --radius-small:13px;
   --radius-medium:20px;
   --radius-large:26px;
 
-  /* EFEITOS */
   --shadow-soft:0 18px 42px rgba(47,73,115,.10);
   --transition-fast:.2s ease;
 }
