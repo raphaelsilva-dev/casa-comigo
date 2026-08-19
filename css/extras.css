@@ -1,6 +1,3 @@
-/* ================================================================
-   V68 — CRÉDITOS, PERFIL DA MARIANA E EASTER EGGS
-   ================================================================ */
 .footer-bottom-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end}
 .footer-credits-link{appearance:none;border:0;background:transparent;padding:3px 0;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;position:relative;opacity:.82;transition:opacity .2s ease,color .2s ease,transform .2s ease}
 .footer-credits-link::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform:scaleX(.35);transform-origin:left;opacity:.45;transition:transform .24s ease,opacity .24s ease}
@@ -27,9 +24,6 @@
 @media(max-width:640px){.footer-bottom-meta{justify-content:flex-start}.credits-note{padding:20px 4px}.credits-line{grid-template-columns:1fr;gap:4px}.credits-note h2{font-size:2.7rem}.profile-card{border-radius:17px}.profile-banner{height:135px;border-radius:16px 16px 0 0}.profile-body{padding:0 18px 22px}.profile-avatar-large{width:94px;height:94px;margin-top:-47px;border-width:5px}.profile-identity h2{font-size:1.65rem}.profile-bio{font-size:.88rem}.profile-full-button{height:45px}.profile-loading{min-height:470px;padding:60px 22px 30px}.profile-loading h2{font-size:2rem}}
 @media(prefers-reduced-motion:reduce){.secret-heart{animation-duration:.01ms!important}}
 
-/* ================================================================
-   V69 — PERFIL MAIS SLIM, EDITÁVEL E COM ESTATÍSTICAS
-   ================================================================ */
 .profile-backdrop{
   background:rgba(214,226,243,.22);
   backdrop-filter:blur(28px) saturate(112%);
@@ -154,14 +148,11 @@
   .profile-tabs{height:44px}.profile-tabs button svg{width:19px;height:19px}
   .profile-edit-screen{min-height:470px;padding:74px 18px 26px}.profile-edit-preview{gap:12px}.profile-edit-avatar{width:78px;height:78px}.profile-edit-actions{display:grid;grid-template-columns:1fr 1fr}.profile-edit-actions button{padding:0 8px}
 }
-/* v69.1 — anel da bio em uma linha própria */
+
 .profile-bio{display:grid;gap:4px;align-items:start}
 .profile-bio-ring{display:block;line-height:1.2}
 
 
-/* ================================================================
-   V70 — AJUSTES FINAIS DO PERFIL DA MARIANA
-   ================================================================ */
 .profile-card{
   border-radius:10px;
   border-color:rgba(255,255,255,.22);
@@ -235,9 +226,6 @@
   .profile-back-button,.profile-full-button{width:100%}
 }
 
-/* ================================================================
-   V81 — CRÉDITOS EM MENSAGEM + BRILHO NOS DETALHES AZUIS
-   ================================================================ */
 .credits-message{
   max-width:610px;margin:28px auto 0;padding:25px 0;
   border-top:1px solid rgba(255,255,255,.13);border-bottom:1px solid rgba(255,255,255,.13);
